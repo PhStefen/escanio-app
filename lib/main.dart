@@ -1,3 +1,4 @@
+import 'package:escanio_app/view/home_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -16,18 +17,18 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.red,
       ),
-      home: const HomePage(),
+      home: const App(),
     );
   }
 }
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class App extends StatefulWidget {
+  const App({super.key});
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<App> createState() => _AppState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _AppState extends State<App> {
   int _selectedIndex = 0;
   void _onTap(int index) {
     setState(() {
@@ -35,42 +36,7 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  static final List<Widget> _pages = <Widget>[
-    Column(
-      children: [
-        Card(
-          elevation: 0,
-          shape: const RoundedRectangleBorder(
-            side: BorderSide(
-              color: Colors.grey,
-            ),
-            borderRadius: BorderRadius.all(Radius.circular(12)),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: Row(
-              children: [
-                const Expanded(
-                  child: TextField(
-                    decoration: InputDecoration(
-                        border: InputBorder.none,
-                        suffixIcon: Icon(Icons.search_rounded),
-                        hintText: "Pesquise o nome ou código do produtos"),
-                  ),
-                ),
-                const Padding(padding: EdgeInsets.symmetric(horizontal: 8)),
-                Icon(Icons.qr_code_rounded, color: Colors.grey.shade600),
-                const Padding(padding: EdgeInsets.only(right: 8)),
-              ],
-            ),
-          ),
-        ),
-        Expanded(
-          child: ListView(),
-        )
-      ],
-    )
-  ];
+  static final List<Widget> _pages = <Widget>[const HomePage()];
 
   @override
   Widget build(BuildContext context) {
