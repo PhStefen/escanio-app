@@ -1,9 +1,23 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:escanio_app/view/home_page.dart';
 import 'package:flutter/material.dart';
 // import 'package:widget_toolkit/widget_toolkit.dart';
 // import 'package:widget_toolkit_qr/widget_toolkit_qr.dart';
 
-void main() {
+const firebaseConfig = FirebaseOptions(
+  apiKey: "AIzaSyDeQ-h2ArRXoGBKEPvverssaCP6MLP8RPA",
+    authDomain: "escanio-app-17dca.firebaseapp.com",
+    projectId: "escanio-app-17dca",
+    storageBucket: "escanio-app-17dca.appspot.com",
+    messagingSenderId: "384208942515",
+    appId: "1:384208942515:web:cffba28106c4fb37b5c7c6",
+    measurementId: "G-9S0KHNCVH2",
+);
+
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: firebaseConfig);
+  
   runApp(const MyApp());
 }
 
