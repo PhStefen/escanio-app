@@ -70,87 +70,70 @@ class _AppState extends State<App> {
           ),
         ),
       ),
-      drawer: Drawer(
-        child: SingleChildScrollView(
-          child: Column(
-            //Se não achar que precisa disso, da para tirar o Container
-            children: [
-              //Header
-              Container(
-                color: Colors.red,
-                padding: EdgeInsets.only(
-                  top: AppBar().preferredSize.height,
-                ),
-              ),
-
-              //Itens SideBar
-              Wrap(
-                runSpacing: 16, //Espaçamento na vertical
-                // crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  //Header
-                  Container(
-                    color: Colors.red,
-                    padding: EdgeInsets.only(
-                      top: MediaQuery.of(context).padding.top,
-                    ),
-                    child: Column(children: const []),
-                  ),
-                  //Itens do Menu
-                  ListTile(
-                    leading: const Icon(Icons.home_rounded),
-                    title: const Text('Home'),
-                    onTap: () {},
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.star),
-                    title: const Text('Example'),
-                    onTap: () {},
-                  ),
-                  //Diviso bonitinho
-                  const Divider(
-                    color: Colors.black,
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.favorite_border_rounded),
-                    title: const Text('Favorite'),
-                    onTap: () {},
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.history),
-                    title: const Text('Example2'),
-                    onTap: () {},
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.access_time),
-                    title: const Text('Example3'),
-                    onTap: () {},
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
+      drawer: const SideBar(),
       body: Card(
         margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
         child: _pages.elementAt(_selectedIndex),
       ),
-      // bottomNavigationBar: BottomNavigationBar(
-      //   items: const [
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.home_rounded),
-      //       label: "Home",
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.home_rounded),
-      //       label: "Home",
-      //     ),
-      //   ],
-      //   currentIndex: _selectedIndex,
-      //   selectedItemColor: Colors.red.shade900,
-      //   onTap: _onTap,
-      // ),
     );
   }
+}
+
+class SideBar extends StatelessWidget {
+  const SideBar({super.key});
+
+  @override
+  Widget build(BuildContext context) => Drawer(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              menuHeader(context),
+              menuItems(context),
+            ],
+          ),
+        ),
+      );
+
+  Widget menuHeader(BuildContext context) => Container(
+        color: Colors.red,
+        padding: EdgeInsets.only(
+          top: AppBar().preferredSize.height,
+        ),
+      );
+
+  Widget menuItems(BuildContext context) => Wrap(
+        runSpacing: 16, //Espaçamento na vertical
+        children: [
+          //Itens do Menu
+          ListTile(
+            leading: const Icon(Icons.home_rounded),
+            title: const Text('Home'),
+            onTap: () {},
+          ),
+          ListTile(
+            leading: const Icon(Icons.star),
+            title: const Text('Example'),
+            onTap: () {},
+          ),
+          //Diviso bonitinho
+          const Divider(
+            color: Colors.black,
+          ),
+          ListTile(
+            leading: const Icon(Icons.favorite_border_rounded),
+            title: const Text('Favorite'),
+            onTap: () {},
+          ),
+          ListTile(
+            leading: const Icon(Icons.history),
+            title: const Text('Example2'),
+            onTap: () {},
+          ),
+          ListTile(
+            leading: const Icon(Icons.access_time),
+            title: const Text('Example3'),
+            onTap: () {},
+          ),
+        ],
+      );
 }
