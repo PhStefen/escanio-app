@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:widget_toolkit_qr/widget_toolkit_qr.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -23,87 +24,125 @@ class MyGridView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Expanded(
-        child: GridView.count(
-          crossAxisCount: 2,
-          mainAxisSpacing: 20, // Espaço entre as linhas
-          crossAxisSpacing: 20,
+        child: Column(
           children: [
             Card(
-              child: Stack(
-                children: [
-                  Container(
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        image: NetworkImage(
-                          'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg',
-                        ),
-                        fit: BoxFit.cover,
+              elevation: 0,
+              shape: const RoundedRectangleBorder(
+                side: BorderSide(
+                  color: Colors.grey,
+                ),
+                borderRadius: BorderRadius.all(Radius.circular(12)),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  children: [
+                    const Padding(padding: EdgeInsets.only(left: 8)),
+                    const Icon(Icons.search_rounded),
+                    const Padding(padding: EdgeInsets.only(left: 8)),
+                    const Expanded(
+                      child: TextField(
+                        decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: "Pesquise o nome ou código do produtos"),
                       ),
                     ),
-                  ),
-                  Column(
-                    children: const [
-                      SizedBox(
-                        height: 16,
-                      ), //Substituindo o padding criando isso.
-                      Text(
-                        'Título do Card',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                      SizedBox(height: 8),
-                      Text(
-                        'Descrição do Card',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+                    const Padding(padding: EdgeInsets.symmetric(horizontal: 8)),
+                    IconButton(
+                      icon: Icon(Icons.qr_code_rounded,
+                          color: Colors.grey.shade600),
+                      onPressed: () {},
+                    ),
+                    const Padding(padding: EdgeInsets.only(right: 8)),
+                  ],
+                ),
               ),
             ),
-            
-            Card(
-              child: Stack(
+            Expanded(
+              child: GridView.count(
+                crossAxisCount: 2,
+                mainAxisSpacing: 20, // Espaço entre as linhas
+                crossAxisSpacing: 20,
                 children: [
-                  Container(
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        image: NetworkImage(
-                          'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl-2.jpg',
+                  Card(
+                    child: Stack(
+                      children: [
+                        Container(
+                          decoration: const BoxDecoration(
+                            image: DecorationImage(
+                              image: NetworkImage(
+                                'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg',
+                              ),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
                         ),
-                        fit: BoxFit.cover,
-                      ),
+                        Column(
+                          children: const [
+                            SizedBox(
+                              height: 16,
+                            ), //Substituindo o padding criando isso.
+                            Text(
+                              'Título do Card',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                            SizedBox(height: 8),
+                            Text(
+                              'Descrição do Card',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
-                  Positioned(
-                    bottom: 0,
-                    child: Column(
-                      children: const [
-                        Text(
-                          'Título do Card',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                  Card(
+                    child: Stack(
+                      children: [
+                        Container(
+                          decoration: const BoxDecoration(
+                            image: DecorationImage(
+                              image: NetworkImage(
+                                'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl-2.jpg',
+                              ),
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
-                        SizedBox(height: 8),
-                        Text(
-                          'Descrição do Card',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.white,
+                        Positioned(
+                          bottom: 0,
+                          child: Column(
+                            children: const [
+                              Text(
+                                'Título do Card',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              SizedBox(height: 8),
+                              Text(
+                                'Descrição do Card',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 8,
+                              ), //Forma de dar espaçamento vertical
+                            ],
                           ),
                         ),
-                        SizedBox(
-                          height: 8,
-                        ), //Forma de dar espaçamento vertical
                       ],
                     ),
                   ),
@@ -113,4 +152,12 @@ class MyGridView extends StatelessWidget {
           ],
         ),
       );
+}
+
+class QrService extends QrValidationService<String> {
+  @override
+  Future<String> validateQrCode(String qrCode) async {
+    ///TODO: validate the qr data here
+    return qrCode;
+  }
 }
