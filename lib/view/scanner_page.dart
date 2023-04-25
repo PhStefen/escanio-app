@@ -11,10 +11,20 @@ class ScannerPage extends StatefulWidget {
 class _ScannerPageState extends State<ScannerPage> {
   @override
   Widget build(BuildContext context) {
-    return QrScannerWidget<String>(
-      qrValidationService: QrService(),
-      onCodeValidated: print,
-      onError: print,
+    return Scaffold(
+      appBar: AppBar(title: Text("Escaneie um produto")),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        child: Column(
+          children: [
+            QrScannerWidget<String>(
+              qrValidationService: QrService(),
+              onCodeValidated: print,
+              onError: print,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

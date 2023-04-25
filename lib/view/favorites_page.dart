@@ -1,17 +1,14 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:escanio_app/components/grid_view.dart';
 import 'package:flutter/material.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class FavoritesPage extends StatefulWidget {
+  const FavoritesPage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<FavoritesPage> createState() => _FavoritesPageState();
 }
 
-class _HomePageState extends State<HomePage> {
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
-
+class _FavoritesPageState extends State<FavoritesPage> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -52,20 +49,9 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ),
-        //Items
-        StreamBuilder(
-          stream: firestore.collection('produtos').snapshots(),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return const CircularProgressIndicator();
-            }
-
-            var products = snapshot.data!.docs;
-
-            return MyGridView(lista: products);
-          },
-        ),
+        MyGridView(lista: [])
       ],
     );
+    ;
   }
 }
