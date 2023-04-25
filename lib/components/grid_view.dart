@@ -13,7 +13,7 @@ class MyGridView extends StatelessWidget {
           children: lista.isEmpty
               ? [
                   const Card(
-                    margin: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                    margin: EdgeInsets.symmetric(horizontal: 16, vertical: ),
                     child: Text(
                       "😿 Lista vazia",
                       style: TextStyle(color: Colors.grey, fontSize: 32),
