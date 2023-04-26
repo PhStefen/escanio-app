@@ -12,20 +12,48 @@ class _ScannerPageState extends State<ScannerPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Escaneie um produto")),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        child: Column(
-          children: [
-            QrScannerWidget<String>(
-              qrValidationService: QrService(),
-              onCodeValidated: print,
-              onError: print,
+        body: StreamBuilder<List<String>>(
+          stream: null,
+          builder: (context, snapshot) {
+            return CustomScrollView(
+              slivers: [
+            SliverAppBar(
+              expandedHeight: 500,
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back, color: Colors.white),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              centerTitle: true,
+              title: Text("eba"),
+              floating: true,
+              stretch: true,
+              pinned: true,
+              flexibleSpace: FlexibleSpaceBar(
+                collapseMode: CollapseMode.pin,
+                centerTitle: true,
+                background: Column(
+                  children: [
+                    Expanded(
+                      child: Text(""),
+                    ),
+                    QrScannerWidget<String>(
+                      qrValidationService: QrService(),
+                      onCodeValidated: print,
+                      onError: print,
+                    )
+                  ],
+                ),
+              ),
             ),
-          ],
-        ),
-      ),
-    );
+            const SliverToBoxAdapter(
+              child: Text("Eba"),
+            )
+              ],
+            );
+          }
+        ));
   }
 }
 
