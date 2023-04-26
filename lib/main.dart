@@ -63,7 +63,20 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
   int _selectedIndex = 0;
+  final _pageController = PageController(initialPage: 0);
+
   void _onTap(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+    _pageController.animateToPage(
+      index,
+      duration: const Duration(microseconds: 300),
+      curve: Curves.easeInOut,
+    );
+  }
+
+  void _onPageChanged(int index){
     setState(() {
       _selectedIndex = index;
     });
@@ -79,7 +92,11 @@ class _AppState extends State<App> {
     return Scaffold(
       body: Card(
         margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        child: _pages.elementAt(_selectedIndex),
+        child: PageView(
+          controller: _pageController,
+          onPageChanged: _onPageChanged,
+          children: _pages,
+        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.red.shade900,
