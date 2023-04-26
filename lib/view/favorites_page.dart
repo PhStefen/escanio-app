@@ -49,9 +49,8 @@ class _FavoritesPageState extends State<FavoritesPage> {
             ),
           ),
         ),
-        MyGridView(lista: [])
+        MyGridView(lista: const [])
       ],
     );
-    ;
   }
 }
