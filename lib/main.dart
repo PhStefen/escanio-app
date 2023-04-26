@@ -77,9 +77,11 @@ class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Card(
-        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        child: _pages.elementAt(_selectedIndex),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          child: _pages.elementAt(_selectedIndex),
+        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.red.shade900,
