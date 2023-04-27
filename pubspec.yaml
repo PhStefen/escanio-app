@@ -38,6 +38,8 @@ dependencies:
   widget_toolkit_qr: ^0.0.1-dev2
   firebase_core: 
   cloud_firestore:
+  flutter_staggered_grid_view: ^0.6.2
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:

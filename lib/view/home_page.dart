@@ -17,44 +17,51 @@ class _HomePageState extends State<HomePage> {
     return Column(
       children: [
         //Barra Pesquisa
-        Card(
-          elevation: 0,
-          shape: const RoundedRectangleBorder(
-            side: BorderSide(
-              color: Colors.grey,
-            ),
-            borderRadius: BorderRadius.all(Radius.circular(12)),
+        Padding(
+          padding: const EdgeInsets.only(
+            top: 8,
+            left: 16,
+            right: 16
           ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
-              children: [
-                const Padding(padding: EdgeInsets.only(left: 8)),
-                const Icon(Icons.search_rounded),
-                const Padding(padding: EdgeInsets.only(left: 8)),
-                Expanded(
-                  child: TextField(
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      hintText: "Pesquise o nome ou código do produtos",
+          child: Card(
+            elevation: 0,
+            shape: const RoundedRectangleBorder(
+              side: BorderSide(
+                color: Colors.grey,
+              ),
+              borderRadius: BorderRadius.all(Radius.circular(12)),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                children: [
+                  const Padding(padding: EdgeInsets.only(left: 8)),
+                  const Icon(Icons.search_rounded),
+                  const Padding(padding: EdgeInsets.only(left: 8)),
+                  Expanded(
+                    child: TextField(
+                      decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        hintText: "Pesquise o nome ou código do produtos",
+                      ),
+                      onChanged: (value) {
+                        setState(() {
+                          pesquisa = value;
+                        });
+                      },
                     ),
-                    onChanged: (value) {
-                      setState(() {
-                        pesquisa = value;
-                      });
+                  ),
+                  const Padding(padding: EdgeInsets.symmetric(horizontal: 8)),
+                  IconButton(
+                    icon: Icon(Icons.qr_code_rounded,
+                        color: Colors.grey.shade600),
+                    onPressed: () {
+                      Navigator.of(context).pushNamed("/scanner");
                     },
                   ),
-                ),
-                const Padding(padding: EdgeInsets.symmetric(horizontal: 8)),
-                IconButton(
-                  icon:
-                      Icon(Icons.qr_code_rounded, color: Colors.grey.shade600),
-                  onPressed: () {
-                    Navigator.of(context).pushNamed("/scanner");
-                  },
-                ),
-                const Padding(padding: EdgeInsets.only(right: 8)),
-              ],
+                  const Padding(padding: EdgeInsets.only(right: 8)),
+                ],
+              ),
             ),
           ),
         ),
@@ -73,8 +80,12 @@ class _HomePageState extends State<HomePage> {
             }
 
             var productsSearch = [];
-            for (int i = 0; i < products.length; i++){ //for (i in products) também funciona
-              if (products[i].data()['nome'].contains(pesquisa)){
+            for (int i = 0; i < products.length; i++) {
+              //for (i in products) também funciona
+              if (products[i]
+                  .data()['nome']
+                  .toLowerCase()
+                  .contains(pesquisa.toLowerCase())) {
                 productsSearch.add(products[i]);
               }
             }

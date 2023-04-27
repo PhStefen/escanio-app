@@ -1,5 +1,8 @@
+import 'dart:ui';
+
 import 'package:escanio_app/view/favorites_page.dart';
 import 'package:escanio_app/view/scanner_page.dart';
+import 'package:escanio_app/view/user_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:escanio_app/view/home_page.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +33,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      // scrollBehavior: NoThumbScrollBehavior().copyWith(scrollbars: false),
       debugShowCheckedModeBanner: false,
       title: 'Escânio',
       theme: ThemeData.light().copyWith(
@@ -76,7 +80,7 @@ class _AppState extends State<App> {
     );
   }
 
-  void _onPageChanged(int index){
+  void _onPageChanged(int index) {
     setState(() {
       _selectedIndex = index;
     });
@@ -84,16 +88,18 @@ class _AppState extends State<App> {
 
   static final List<Widget> _pages = <Widget>[
     const HomePage(),
-    const FavoritesPage()
+    const FavoritesPage(),
+    const UserPage(),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-          child: _pages.elementAt(_selectedIndex),
+        child: PageView(
+          controller: _pageController,
+          onPageChanged: _onPageChanged,
+          children: _pages,
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -118,4 +124,13 @@ class _AppState extends State<App> {
       ),
     );
   }
+}
+
+class NoThumbScrollBehavior extends ScrollBehavior {
+  @override
+  Set<PointerDeviceKind> get dragDevices => {
+        PointerDeviceKind.touch,
+        PointerDeviceKind.mouse,
+        PointerDeviceKind.stylus,
+      };
 }

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:intl/intl.dart';
 
 class MyGridView extends StatelessWidget {
   var lista = [];
@@ -6,71 +8,68 @@ class MyGridView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Expanded(
+          child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8),
         child: lista.isEmpty
-            ? const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: Text(
-                  "Lista vazia",
-                  style: TextStyle(color: Colors.grey, fontSize: 32),
-                ),
+            ? const Text(
+                "Lista vazia",
+                style: TextStyle(color: Colors.grey, fontSize: 32),
               )
-            : GridView.count(
-                crossAxisCount: 2,
-                mainAxisSpacing: 20, // Espaço entre as linhas
-                crossAxisSpacing: 20,
-                children: lista
-                    .map(
-                      (myList) => Card(
-                        child: Stack(
+            : MasonryGridView.count(
+                crossAxisCount: 1,
+                itemCount: lista.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: Column(
                           children: [
-                            Container(
-                              decoration: const BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(8)),
-                                // image: DecorationImage(
-                                //   image: NetworkImage(
-                                //     'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl-2.jpg',
-                                //   ),
-                                //   fit: BoxFit.cover,
-                                // ),
-                                color: Colors.grey,
-                              ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  lista[index]['nome']
+                                      .toString()
+                                      .replaceFirstMapped(
+                                        RegExp(r'.'),
+                                        (match) => match.group(0)!.toUpperCase(),
+                                      ),
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                const Text(
+                                  "10/10/2023",
+                                  style: TextStyle(fontSize: 12),
+                                )
+                              ],
                             ),
-                            Positioned(
-                              bottom: 0,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    myList['nome']
-                                            .substring(0, 1)
-                                            .toUpperCase() +
-                                        myList['nome'].substring(1),
-                                    style: const TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 8),
-                                  Text(
-                                    "R\$ ${myList['preco'].toString()}",
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 8,
-                                  ), //Forma de dar espaçamento vertical
-                                ],
-                              ),
+                            const Padding(padding: EdgeInsets.symmetric(vertical: 4)),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  NumberFormat.currency(
+                                    locale: 'pt_BR',
+                                    decimalDigits: 2,
+                                    symbol: 'R\$',
+                                  ).format(lista[index]['preco']),
+                                ),
+                                const Icon(
+                                  Icons.arrow_circle_up_rounded,
+                                  color: Colors.red,
+                                )
+                              ],
                             ),
                           ],
                         ),
                       ),
-                    )
-                    .toList(),
+                    ),
+                  );
+                },
               ),
-      );
+      ));
 }
