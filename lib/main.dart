@@ -104,16 +104,16 @@ class _AppState extends State<App> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.red.shade900,
-        items: const [
-          BottomNavigationBarItem(
+        items: [
+          const BottomNavigationBarItem(
             icon: Icon(Icons.home_rounded),
             label: "Home",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.star_rounded),
+            icon: Icon(_selectedIndex == 1? Icons.favorite : Icons.favorite_border),
             label: "Favoritos",
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.person_rounded),
             label: "Conta",
           ),
