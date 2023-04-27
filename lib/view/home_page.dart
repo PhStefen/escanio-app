@@ -11,7 +11,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-
+  String pesquisa = '';
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -32,11 +32,17 @@ class _HomePageState extends State<HomePage> {
                 const Padding(padding: EdgeInsets.only(left: 8)),
                 const Icon(Icons.search_rounded),
                 const Padding(padding: EdgeInsets.only(left: 8)),
-                const Expanded(
+                Expanded(
                   child: TextField(
-                    decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: "Pesquise o nome ou código do produtos"),
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      hintText: "Pesquise o nome ou código do produtos",
+                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        pesquisa = value;
+                      });
+                    },
                   ),
                 ),
                 const Padding(padding: EdgeInsets.symmetric(horizontal: 8)),
@@ -62,7 +68,18 @@ class _HomePageState extends State<HomePage> {
 
             var products = snapshot.data!.docs;
 
-            return MyGridView(lista: products);
+            if (pesquisa.isEmpty) {
+              return MyGridView(lista: products);
+            }
+
+            var productsSearch = [];
+            for (int i = 0; i < products.length; i++){ //for (i in products) também funciona
+              if (products[i].data()['nome'].contains(pesquisa)){
+                productsSearch.add(products[i]);
+              }
+            }
+
+            return MyGridView(lista: productsSearch);
           },
         ),
       ],

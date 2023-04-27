@@ -7,8 +7,8 @@ class MyGridView extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Expanded(
         child: lista.isEmpty
-            ? const Card(
-                margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            ? const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: Text(
                   "Lista vazia",
                   style: TextStyle(color: Colors.grey, fontSize: 32),
@@ -27,20 +27,25 @@ class MyGridView extends StatelessWidget {
                               decoration: const BoxDecoration(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(8)),
-                                image: DecorationImage(
-                                  image: NetworkImage(
-                                    'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl-2.jpg',
-                                  ),
-                                  fit: BoxFit.cover,
-                                ),
+                                // image: DecorationImage(
+                                //   image: NetworkImage(
+                                //     'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl-2.jpg',
+                                //   ),
+                                //   fit: BoxFit.cover,
+                                // ),
+                                color: Colors.grey,
                               ),
                             ),
                             Positioned(
                               bottom: 0,
                               child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    myList['nome'],
+                                    myList['nome']
+                                            .substring(0, 1)
+                                            .toUpperCase() +
+                                        myList['nome'].substring(1),
                                     style: const TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,
@@ -49,7 +54,7 @@ class MyGridView extends StatelessWidget {
                                   ),
                                   const SizedBox(height: 8),
                                   Text(
-                                    myList['preco'].toString(),
+                                    "R\$ ${myList['preco'].toString()}",
                                     style: const TextStyle(
                                       fontSize: 16,
                                       color: Colors.white,
