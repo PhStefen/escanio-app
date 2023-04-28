@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "384208942515-32baomkcskkqfo54lo78pq9j886f6te9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.escanio_app",
+            "certificate_hash": "3c935dc29538fa1e32cbfa9824b25a30da794e4e"
+          }
+        },
+        {
           "client_id": "384208942515-g7isvgp8rrp7unk432354hdu7kqj2sqr.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

@@ -1,11 +1,11 @@
 import 'dart:ui';
 
+import 'package:escanio_app/services/firebase.dart';
 import 'package:escanio_app/view/favorites_page.dart';
 import 'package:escanio_app/view/login_page.dart';
 import 'package:escanio_app/view/scanner_page.dart';
 import 'package:escanio_app/view/user_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:escanio_app/view/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:widget_toolkit/widget_toolkit.dart';
@@ -13,7 +13,7 @@ import 'package:widget_toolkit_qr/widget_toolkit_qr.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await FirebaseService.init();
 
   runApp(const MyApp());
 }

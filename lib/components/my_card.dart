@@ -61,50 +61,69 @@ class _MyCardState extends State<MyCard> {
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(12)),
         ),
-        child: InkWell(
-          borderRadius: const BorderRadius.all(Radius.circular(12)),
-          onLongPress: () => showSnackBar(context),
-          child: Padding(
-            padding: const EdgeInsets.all(12),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      widget.produto['nome'].toString().replaceFirstMapped(
-                            RegExp(r'.'),
-                            (match) => match.group(0)!.toUpperCase(),
-                          ),
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    const Text(
-                      "10/10/2023",
-                      style: TextStyle(fontSize: 12),
-                    )
-                  ],
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              IconButton(
+                onPressed: () => showSnackBar(context),
+                icon: Icon(
+                  favorito ? Icons.favorite : Icons.favorite_border,
+                  color: Colors.red,
                 ),
-                const Padding(padding: EdgeInsets.symmetric(vertical: 4)),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      NumberFormat.currency(
-                        locale: 'pt_BR',
-                        decimalDigits: 2,
-                        symbol: 'R\$',
-                      ).format(widget.produto['preco']),
-                    ),
-                    Icon(
-                      favorito ? Icons.favorite : Icons.favorite_border,
-                      color: Colors.red,
-                    )
-                  ],
+              ),
+              const Padding(padding: EdgeInsets.only(left: 16)),
+              Wrap(
+                direction: Axis.vertical,
+                spacing: 8,
+                children: [
+                  Wrap(
+                    spacing: 8,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      Text(
+                        widget.produto['nome'].toString().replaceFirstMapped(
+                              RegExp(r'.'),
+                              (match) => match.group(0)!.toUpperCase(),
+                            ),
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      )
+                    ],
+                  ),
+                  Wrap(
+                    spacing: 8,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      Text(
+                        NumberFormat.currency(
+                          locale: 'pt_BR',
+                          decimalDigits: 2,
+                          symbol: 'R\$',
+                        ).format(widget.produto['preco']),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+              Expanded(
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: Wrap(
+                    direction: Axis.vertical,
+                    spacing: 8,
+                    children: const [
+                      Text(
+                        "10/10/2023",
+                        style: TextStyle(fontSize: 12),
+                      ),
+                      Text("123456789")
+                    ],
+                  ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       );
