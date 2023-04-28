@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "384208942515",
+    "project_id": "escanio-app-17dca",
+    "storage_bucket": "escanio-app-17dca.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:384208942515:android:a786780dbf298301b5c7c6",
+        "android_client_info": {
+          "package_name": "com.example.escanio_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "384208942515-g7isvgp8rrp7unk432354hdu7kqj2sqr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.escanio_app",
+            "certificate_hash": "64fdec493d80e5728acb1de29cb86f91f496a43e"
+          }
+        },
+        {
+          "client_id": "384208942515-0r32h34qgdkun08qrn521a4v20ulhjv4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBN8LQM-Edp0P3Dhbp89KGmpHRaeiMLe20"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "384208942515-0r32h34qgdkun08qrn521a4v20ulhjv4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

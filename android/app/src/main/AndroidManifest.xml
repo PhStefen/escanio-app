@@ -3,7 +3,7 @@
     package="com.example.escanio_app">
     <uses-permission android:name="android.permission.CAMERA"/>
     <application
-        android:label="escanio_app"
+        android:label="Escânio"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

@@ -1,27 +1,19 @@
 import 'dart:ui';
 
 import 'package:escanio_app/view/favorites_page.dart';
+import 'package:escanio_app/view/login_page.dart';
 import 'package:escanio_app/view/scanner_page.dart';
 import 'package:escanio_app/view/user_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:escanio_app/view/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:widget_toolkit/widget_toolkit.dart';
 import 'package:widget_toolkit_qr/widget_toolkit_qr.dart';
 
-const firebaseConfig = FirebaseOptions(
-  apiKey: "AIzaSyDeQ-h2ArRXoGBKEPvverssaCP6MLP8RPA",
-  authDomain: "escanio-app-17dca.firebaseapp.com",
-  projectId: "escanio-app-17dca",
-  storageBucket: "escanio-app-17dca.appspot.com",
-  messagingSenderId: "384208942515",
-  appId: "1:384208942515:web:cffba28106c4fb37b5c7c6",
-  measurementId: "G-9S0KHNCVH2",
-);
-
-void main() async {
+Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: firebaseConfig);
+  await Firebase.initializeApp();
 
   runApp(const MyApp());
 }
@@ -52,9 +44,21 @@ class MyApp extends StatelessWidget {
       ),
       routes: {
         "/scanner": (context) => const ScannerPage(),
+        "/login": (context) => const LoginPage(),
       },
       initialRoute: "/",
-      home: const App(),
+      // home: const App(),
+      home: StreamBuilder<User?>(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.hasError) print(snapshot.error);
+          return (snapshot.hasError ||
+                  snapshot.connectionState == ConnectionState.active &&
+                      !snapshot.hasData)
+              ? const LoginPage()
+              : const App();
+        },
+      ),
     );
   }
 }
@@ -110,7 +114,8 @@ class _AppState extends State<App> {
             label: "Home",
           ),
           BottomNavigationBarItem(
-            icon: Icon(_selectedIndex == 1? Icons.favorite : Icons.favorite_border),
+            icon: Icon(
+                _selectedIndex == 1 ? Icons.favorite : Icons.favorite_border),
             label: "Favoritos",
           ),
           const BottomNavigationBarItem(
