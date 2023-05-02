@@ -55,7 +55,8 @@ class MyApp extends StatelessWidget {
           return (snapshot.hasError ||
                   snapshot.connectionState == ConnectionState.active &&
                       !snapshot.hasData)
-              ? const LoginPage()
+              // ? const LoginPage()
+              ? const App()
               : const App();
         },
       ),

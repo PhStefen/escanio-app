@@ -18,7 +18,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
 
-    HistoryService.add("10", 15);
+    // HistoryService.getAll();
   }
 
   @override
@@ -71,31 +71,46 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         //Items
+        // StreamBuilder(
+        //   stream: firestore.collection('produtos').snapshots(),
+        //   builder: (context, snapshot) {
+        //     if (!snapshot.hasData) {
+        //       return const CircularProgressIndicator();
+        //     }
+
+        //     var products = snapshot.data!.docs;
+
+        //     if (pesquisa.isEmpty) {
+        //       return MyGridView(lista: products);
+        //     }
+
+        //     var productsSearch = [];
+        //     for (int i = 0; i < products.length; i++) {
+        //       //for (i in products) também funciona
+        //       if (products[i]
+        //           .data()['nome']
+        //           .toLowerCase()
+        //           .contains(pesquisa.toLowerCase())) {
+        //         productsSearch.add(products[i]);
+        //       }
+        //     }
+
+        //     return MyGridView(lista: productsSearch);
+        //   },
+        // ),
         StreamBuilder(
-          stream: firestore.collection('produtos').snapshots(),
+          stream: HistoryService.getNext(null),
           builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return const CircularProgressIndicator();
-            }
-
-            var products = snapshot.data!.docs;
-
-            if (pesquisa.isEmpty) {
-              return MyGridView(lista: products);
-            }
-
-            var productsSearch = [];
-            for (int i = 0; i < products.length; i++) {
-              //for (i in products) também funciona
-              if (products[i]
-                  .data()['nome']
-                  .toLowerCase()
-                  .contains(pesquisa.toLowerCase())) {
-                productsSearch.add(products[i]);
-              }
-            }
-
-            return MyGridView(lista: productsSearch);
+            if (!snapshot.hasData) return const CircularProgressIndicator();
+            var items = snapshot.data!.docs;
+            print(items.length);
+            print(items);
+            print(snapshot.data!.docs);
+            print(items[0].data().date.toString());
+            return Text('eba');
+            // Column(
+            //   children: [...items.map((i) => Text(i.data().date.toString()))],
+            // );
           },
         ),
       ],
