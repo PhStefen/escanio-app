@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:escanio_app/components/grid_view.dart';
+import 'package:escanio_app/services/history.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -12,17 +13,21 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   String pesquisa = '';
+
+  @override
+  void initState() {
+    super.initState();
+
+    HistoryService.add("10", 15);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         //Barra Pesquisa
         Padding(
-          padding: const EdgeInsets.only(
-            top: 8,
-            left: 16,
-            right: 16
-          ),
+          padding: const EdgeInsets.only(top: 8, left: 16, right: 16),
           child: Card(
             elevation: 0,
             shape: const RoundedRectangleBorder(

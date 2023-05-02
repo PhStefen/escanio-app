@@ -1,12 +1,15 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class FirebaseService {
-  static final _instance = FirebaseAuth.instance;
+  static final _auth = FirebaseAuth.instance;
+  static final fireStore = FirebaseFirestore.instance;
+  static final currentUser = FirebaseAuth.instance.currentUser;
   static const _firebaseOptions = FirebaseOptions(
     apiKey: "AIzaSyDeQ-h2ArRXoGBKEPvverssaCP6MLP8RPA",
     authDomain: "escanio-app-17dca.firebaseapp.com",
@@ -16,7 +19,6 @@ class FirebaseService {
     appId: "1:384208942515:web:cffba28106c4fb37b5c7c6",
     measurementId: "G-9S0KHNCVH2",
   );
-  static final currentUser = FirebaseAuth.instance.currentUser;
 
   static Future init() async {
     await Firebase.initializeApp(
@@ -26,7 +28,7 @@ class FirebaseService {
 
   static Future signIn() async {
     if (kIsWeb) {
-      await _instance.signInAnonymously();
+      await _auth.signInAnonymously();
       return;
     }
 
@@ -36,11 +38,11 @@ class FirebaseService {
       accessToken: googleAuth?.accessToken,
       idToken: googleAuth?.idToken,
     );
-    await _instance.signInWithCredential(credential);
+    await _auth.signInWithCredential(credential);
   }
 
   static Future signOut() async {
-    var futures = [_instance.signOut()];
+    var futures = [_auth.signOut()];
     if (!currentUser!.isAnonymous) {
       futures.add(GoogleSignIn().signOut());
     }

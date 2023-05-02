@@ -62,66 +62,50 @@ class _MyCardState extends State<MyCard> {
           borderRadius: BorderRadius.all(Radius.circular(12)),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: Wrap(
+            alignment: WrapAlignment.spaceBetween,
+            crossAxisAlignment: WrapCrossAlignment.center,
             children: [
-              IconButton(
-                onPressed: () => showSnackBar(context),
-                icon: Icon(
-                  favorito ? Icons.favorite : Icons.favorite_border,
-                  color: Colors.red,
-                ),
-              ),
-              const Padding(padding: EdgeInsets.only(left: 16)),
               Wrap(
-                direction: Axis.vertical,
                 spacing: 8,
+                runSpacing: 8,
+                direction: Axis.vertical,
                 children: [
-                  Wrap(
-                    spacing: 8,
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    children: [
-                      Text(
-                        widget.produto['nome'].toString().replaceFirstMapped(
-                              RegExp(r'.'),
-                              (match) => match.group(0)!.toUpperCase(),
-                            ),
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      )
-                    ],
+                  Text(
+                    widget.produto['nome'].toString().replaceFirstMapped(
+                          RegExp(r'.'),
+                          (match) => match.group(0)!.toUpperCase(),
+                        ),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  Wrap(
-                    spacing: 8,
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    children: [
-                      Text(
-                        NumberFormat.currency(
-                          locale: 'pt_BR',
-                          decimalDigits: 2,
-                          symbol: 'R\$',
-                        ).format(widget.produto['preco']),
-                      ),
-                    ],
-                  )
+                  Text(
+                    NumberFormat.currency(
+                      locale: 'pt_BR',
+                      decimalDigits: 2,
+                      symbol: 'R\$',
+                    ).format(widget.produto['preco']),
+                  ),
                 ],
               ),
-              Expanded(
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: Wrap(
-                    direction: Axis.vertical,
-                    spacing: 8,
-                    children: const [
-                      Text(
-                        "10/10/2023",
-                        style: TextStyle(fontSize: 12),
-                      ),
-                      Text("123456789")
-                    ],
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                direction: Axis.vertical,
+                crossAxisAlignment: WrapCrossAlignment.end,
+                children: [
+                  const Text(
+                    "10/10/2023",
+                    style: TextStyle(fontSize: 12),
                   ),
-                ),
+                  GestureDetector(
+                    onTap: () => showSnackBar(context),
+                    child: Icon(
+                      favorito ? Icons.favorite : Icons.favorite_border,
+                      color: Colors.red,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
