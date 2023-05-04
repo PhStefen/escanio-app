@@ -61,7 +61,7 @@ class _MyCardState extends State<MyCard> {
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(12)),
         ),
-        child: Padding(
+        child: Padding( 
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: Wrap(
             alignment: WrapAlignment.spaceBetween,
