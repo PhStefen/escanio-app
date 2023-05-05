@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:escanio_app/services/firebase.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -10,20 +13,64 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Login")),
-      body: Container(
+      body: SizedBox(
         height: double.infinity,
         width: double.infinity,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            Icon(
-              Icons.qr_code_rounded,
-              size: 300,
+          children: [
+            Image.asset(
+              'images/LogoScaner.png',
+              height: 300,
             ),
-            ElevatedButton(
-              onPressed: FirebaseService.signIn,
-              child: Text("Continuar com o Google"),
-            )
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Column(
+                  children: [
+                    Container(
+                      height: 50,
+                      width: 50,
+                      decoration: const BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage(
+                            'images/unnamed.png',
+                          ),
+                        ),
+                      ),
+                      child: GestureDetector(
+                        onTap: FirebaseService.signInAnonymously,
+                      ),
+                    ),
+                    const Text('Continuar como Anônimo'),
+                  ],
+                ),
+                if (!kIsWeb)
+                Column(
+                  children: [
+                    Container(
+                      height: 50,
+                      width: 50,
+                      decoration: const BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage(
+                            'images/google_PNG19635.png',
+                          ),
+                        ),
+                      ),
+                      child: GestureDetector(
+                        onTap: FirebaseService.signInGoogle,
+                      ),
+                    ),
+                    const Text('Continuar com o Google'),
+                  ],
+                ),
+              ],
+            ),
+            // const ElevatedButton(
+            //   onPressed: FirebaseService.signIn,
+            //   child: Text("Continuar com o Google"),
+            // ),
           ],
         ),
       ),

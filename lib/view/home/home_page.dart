@@ -94,6 +94,7 @@ class _HomePageState extends State<HomePage> {
             child: FutureBuilder(
               future: HistoryService.getAll(),
               builder: (context, snapshot) {
+                return Text('Teste');
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Text('Carregando dados da coleção...');
                 }
