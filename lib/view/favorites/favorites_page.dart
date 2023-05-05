@@ -116,7 +116,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
                                 ),
                                 GestureDetector(
                                   onTap: () {
-                                    FavoritesService.delete(doc.id);
+                                    // FavoritesService.delete(doc);
                                   },
                                   child: const Icon(
                                     Icons.favorite,

@@ -1,6 +1,5 @@
 import 'package:escanio_app/models/products.dart';
 import 'package:escanio_app/services/favorites.dart';
-import 'package:escanio_app/services/products.dart';
 import 'package:escanio_app/utils/string.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -9,8 +8,10 @@ class ProductItem extends StatelessWidget {
   Product item;
   ProductItem({super.key, required this.item});
 
-  Future onTap() async {
-    FavoritesService.add(item.id, item.name);
+  Future onTap(bool alreadyExists) async {
+    await (alreadyExists
+        ? FavoritesService.delete(item)
+        : FavoritesService.add(item));
   }
 
   @override
@@ -36,22 +37,37 @@ class ProductItem extends StatelessWidget {
                     StringUtils.toCamelCase(item.name),
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  Text(
-                    NumberFormat.currency(
-                      locale: 'pt_BR',
-                      decimalDigits: 2,
-                      symbol: 'R\$',
-                    ).format(item.price),
-                  ),
+                  // Text(
+                  //   NumberFormat.currency(
+                  //     locale: 'pt_BR',
+                  //     decimalDigits: 2,
+                  //     symbol: 'R\$',
+                  //   ).format(item.price),
+                  // ),
                 ],
               ),
-              GestureDetector(
-                onTap: onTap,
-                child: Icon(
-                  Icons.favorite_border,
-                  color: Colors.red,
-                ),
-              ),
+              StreamBuilder(
+                  stream: FavoritesService.collection.doc(item.id).snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting)
+                      return const Text("eba");
+                    if (snapshot.hasError) return const Text("eba2");
+
+                    var alreadyExists = snapshot.data!.exists;
+
+                    return GestureDetector(
+                      onTap: () => onTap(alreadyExists),
+                      child: alreadyExists
+                          ? const Icon(
+                              Icons.favorite,
+                              color: Colors.red,
+                            )
+                          : const Icon(
+                              Icons.favorite_border,
+                              color: Colors.red,
+                            ),
+                    );
+                  }),
             ],
           ),
         ),

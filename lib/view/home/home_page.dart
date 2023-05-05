@@ -21,7 +21,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
@@ -72,24 +71,6 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           const Padding(padding: EdgeInsets.symmetric(vertical: 8)),
-          // Expanded(
-          //   child: StreamBuilder(
-          //     stream: HistoryService.getNext(),
-          //     builder: (context, snapshot) {
-          //       if (snapshot.connectionState == ConnectionState.waiting) {
-          //         return const Text('Carregando dados da coleção...');
-          //       }
-          //       if (snapshot.hasError) {
-          //         return const Text("Deu erro!");
-          //       }
-
-
-          //       var groups = snapshot.data!.docs.map((e) => e.data()).toList();
-
-          //       return HistoryList(list: groups);
-          //     },
-          //   ),
-          // ),
           Expanded(
             child: FutureBuilder(
               future: HistoryService.getAll(),

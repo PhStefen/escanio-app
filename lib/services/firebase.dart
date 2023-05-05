@@ -26,9 +26,18 @@ class FirebaseService {
     );
   }
 
+  static Future _addUser() async {
+    var docRef =
+        fireStore.collection("users").doc(FirebaseService.currentUser!.uid);
+    var snapshot = await docRef.get();
+
+    if (!snapshot.exists) await docRef.set({});
+  }
+
   static Future signIn() async {
     if (kIsWeb) {
       await _auth.signInAnonymously();
+      _addUser();
       return;
     }
 
@@ -39,6 +48,7 @@ class FirebaseService {
       idToken: googleAuth?.idToken,
     );
     await _auth.signInWithCredential(credential);
+    _addUser();
   }
 
   static Future signOut() async {
