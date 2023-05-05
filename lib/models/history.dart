@@ -5,14 +5,15 @@ class History {
 
   History.fromJson(Map<String, Object?> json)
       : this(
-          id: json["id"] as String,
-          date: json["date"] as Timestamp,
+          id: json['id']! as String,
+          date: json['date']! as Timestamp,
         );
 
   final String id;
   final Timestamp date;
-
   Map<String, Object?> toJson() {
-    return {'date': date};
+    return {
+      'date': date,
+    };
   }
 }

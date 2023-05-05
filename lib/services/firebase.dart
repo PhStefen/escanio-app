@@ -28,15 +28,23 @@ class FirebaseService {
     );
   }
 
+  static Future _addUser() async {
+    var docRef =
+        fireStore.collection("users").doc(FirebaseService.getUser()!.uid);
+    var snapshot = await docRef.get();
+
+    if (!snapshot.exists) await docRef.set({});
+  }
+
   static Future signInGoogle() async {
     var googleUser = await GoogleSignIn().signIn();
-    var googleAuth = await googleUser?.authentication;
     var credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
+      accessToken: googleUser?.accessToken,
+      idToken: googleUser?.idToken,
     );
     print('signInGoogle');
     await _auth.signInWithCredential(credential);
+    _addUser();
   }
 
   static Future signInAnonymously() async {
