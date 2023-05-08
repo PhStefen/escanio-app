@@ -16,14 +16,12 @@ class HistoryItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: HistoryService.getProducts(item.id), 
+      future: HistoryService.getProducts(item.id),
       builder: (context, snapshot) {
-        
-        if(snapshot.connectionState==ConnectionState.waiting)
-        return const Text("eba");
-        if(snapshot.hasError)
-        return const Text("eba2");
-        var products = snapshot.data!.docs.map((e) => e.data());
+        if (snapshot.connectionState == ConnectionState.waiting)
+          return const Text("eba");
+        if (snapshot.hasError) return const Text("eba2");
+        var products = snapshot.data!.map((e) => e.data()!);
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,

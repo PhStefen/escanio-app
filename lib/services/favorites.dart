@@ -5,7 +5,7 @@ import 'package:escanio_app/services/firebase.dart';
 class FavoritesService {
   static final collection = FirebaseService.fireStore
       .collection("users")
-      .doc(FirebaseService.currentUser!.uid)
+      .doc(FirebaseService.getUser()!.uid)
       .collection("favorites")
       .withConverter<Product>(
         fromFirestore: (snapshot, _) =>
