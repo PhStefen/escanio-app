@@ -28,7 +28,7 @@ class _UserPageState extends State<UserPage> {
               children: [
                 ClipOval(
                   child: Image.asset(
-                    'images/unnamed.png',
+                    'images/anonymous512.png',
                     height: 300,
                   ),
                 ),
