@@ -1,5 +1,7 @@
+import 'package:escanio_app/components/product_card.dart';
 import 'package:escanio_app/services/history.dart';
-import 'package:escanio_app/view/home/history_list.dart';
+import 'package:escanio_app/utils/string_utils.dart';
+import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -58,8 +60,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     const Padding(padding: EdgeInsets.symmetric(horizontal: 8)),
                     IconButton(
-                      icon: Icon(Icons.qr_code_rounded,
-                          color: Colors.grey.shade600),
+                      icon: Icon(Icons.qr_code_rounded, color: Colors.grey.shade600),
                       onPressed: () {
                         Navigator.of(context).pushNamed("/scanner");
                       },
@@ -72,22 +73,66 @@ class _HomePageState extends State<HomePage> {
           ),
           const Padding(padding: EdgeInsets.symmetric(vertical: 8)),
           Expanded(
-            child: FutureBuilder(
-              future: HistoryService.getAll(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Text('Carregando dados da coleção...');
-                }
-                if (snapshot.hasError) {
-                  return const Text("Deu erro!");
-                }
-
-                var groups = snapshot.data!.docs.map((e) => e.data()).toList();
-                return HistoryList(list: groups);
+            child: FirestoreListView(
+              query: HistoryService.getAll(),
+              emptyBuilder: (_) => const Center(
+                child: Text("Nenhum produto foi escâneado ainda"),
+              ),
+              errorBuilder: (context, error, stackTrace) => Text(error.toString()),
+              itemBuilder: (_, snapshot) {
+                var history = snapshot.data();
+                return StreamBuilder(
+                  stream: HistoryService.getItems(snapshot.id),
+                  builder: (_, snapshot) {
+                    if (!snapshot.hasData) {
+                      return Container();
+                    }
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          StringUtils.toCamelCase(
+                            timeago.format(
+                              history.createdAt.toDate(),
+                              locale: "pt_BR",
+                            ),
+                          ),
+                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                        ),
+                        const SizedBox(height: 16),
+                        ...snapshot.data!.docs.map((e) => ProductCard(productId: e.id)),
+                      ],
+                    );
+                  },
+                );
               },
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class CircularProgressIndicatorCard extends StatelessWidget {
+  const CircularProgressIndicatorCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: SizedBox(
+        width: double.infinity,
+        child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(12)),
+          ),
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          ),
+        ),
       ),
     );
   }

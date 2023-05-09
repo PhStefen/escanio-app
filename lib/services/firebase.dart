@@ -9,7 +9,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 class FirebaseService {
   static final _auth = FirebaseAuth.instance;
   static final fireStore = FirebaseFirestore.instance;
-  // static var currentUser = ;
   static const _firebaseOptions = FirebaseOptions(
     apiKey: "AIzaSyDeQ-h2ArRXoGBKEPvverssaCP6MLP8RPA",
     authDomain: "escanio-app-17dca.firebaseapp.com",

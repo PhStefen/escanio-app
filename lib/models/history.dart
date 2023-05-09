@@ -1,19 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class History {
-  History({required this.id, required this.date});
+  History({required this.createdAt});
 
   History.fromJson(Map<String, Object?> json)
       : this(
-          id: json['id']! as String,
-          date: json['date']! as Timestamp,
+          createdAt: json['createdAt']! as Timestamp,
         );
 
-  final String id;
-  final Timestamp date;
+  final Timestamp createdAt;
   Map<String, Object?> toJson() {
     return {
-      'date': date,
+      'createdAt': createdAt,
     };
   }
 }

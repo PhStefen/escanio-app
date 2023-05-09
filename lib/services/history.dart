@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:escanio_app/models/history.dart';
-import 'package:escanio_app/models/products.dart';
+import 'package:escanio_app/models/history_item.dart';
 import 'package:escanio_app/services/firebase.dart';
 
 class HistoryService {
@@ -8,31 +8,26 @@ class HistoryService {
       .collection("users")
       // .doc(FirebaseService.getUser()!.uid)
       .doc("bHI3ZZCNJUcItrdVhIMquKXv9Mk2")
-      .collection("history");
+      .collection("history")
+      .withConverter<History>(
+        fromFirestore: (snapshot, _) => History.fromJson(snapshot.data()!),
+        toFirestore: (model, _) => model.toJson(),
+      );
 
-  static Future<List<DocumentSnapshot<Product>>> getProducts(String id) async {
-    var itemsSnapshot = await collection.doc(id).collection("items").get();
-    var items = itemsSnapshot.docs.map((e) => e.data()).toList();
-
-    return Future.wait(items.map((e) {
-      DocumentReference ref = e["product"];
-      return ref
-          .withConverter<Product>(
-            fromFirestore: (snapshot, _) =>
-                Product.fromJson({...snapshot.data()!, "id": snapshot.id}),
-            toFirestore: (model, _) => model.toJson(),
-          )
-          .get();
-    }));
-  }
-
-  static Future<QuerySnapshot<History>> getAll() {
+  static Stream<QuerySnapshot<HistoryItem>> getItems(String id) {
     return collection
-        .withConverter<History>(
+        .doc(id)
+        .collection("items")
+        .withConverter<HistoryItem>(
           fromFirestore: (snapshot, _) =>
-              History.fromJson({...snapshot.data()!, "id": snapshot.id}),
+              HistoryItem.fromJson({...snapshot.data()!, "id": snapshot.id}),
           toFirestore: (model, _) => model.toJson(),
         )
-        .get();
+        .orderBy("createdAt")
+        .snapshots();
+  }
+
+  static Query<History> getAll() {
+    return collection.orderBy("createdAt");
   }
 }

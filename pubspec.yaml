@@ -43,6 +43,7 @@ dependencies:
   firebase_auth: ^4.4.2
   google_sign_in: ^6.1.0
   timeago: ^3.3.0
+  firebase_ui_firestore: ^1.4.0
 
 dev_dependencies:
   flutter_test:
