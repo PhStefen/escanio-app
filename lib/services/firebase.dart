@@ -42,13 +42,13 @@ class FirebaseService {
       accessToken: googleAuth?.accessToken,
       idToken: googleAuth?.idToken,
     );
-    print('signInGoogle');
+    // print('signInGoogle');
     await _auth.signInWithCredential(credential);
     _addUser();
   }
 
   static Future signInAnonymously() async {
-    print('signInAnonymously');
+    // print('signInAnonymously');
     await _auth.signInAnonymously();
   }
 

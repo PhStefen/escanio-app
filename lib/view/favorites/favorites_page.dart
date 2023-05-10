@@ -1,4 +1,3 @@
-import 'package:escanio_app/components/grid_view.dart';
 import 'package:escanio_app/services/favorites_service.dart';
 import 'package:escanio_app/utils/string_utils.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
