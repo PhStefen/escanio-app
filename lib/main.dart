@@ -12,14 +12,29 @@ import 'package:widget_toolkit/widget_toolkit.dart';
 import 'package:widget_toolkit_qr/widget_toolkit_qr.dart';
 
 Future main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await FirebaseService.init();
-
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  bool showSplash = true;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    WidgetsFlutterBinding.ensureInitialized();
+    FirebaseService.init().then((value) => setState(() {
+          showSplash = false;
+        }));
+  }
 
   // This widget is the root of your application.
   @override
@@ -47,18 +62,26 @@ class MyApp extends StatelessWidget {
         "/login": (context) => const LoginPage(),
       },
       initialRoute: "/",
-      // home: const App(),
-      home: StreamBuilder<User?>(
-        stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (snapshot.hasError) print(snapshot.error);
-          return (snapshot.hasError ||
-                  snapshot.connectionState == ConnectionState.active &&
-                      !snapshot.hasData)
-              ? const LoginPage()
-              : const App();
-        },
-      ),
+      home: showSplash
+          ? Container(
+              decoration: const BoxDecoration(
+                // color: Colors.black,
+                image: DecorationImage(
+                  image: AssetImage('images/LogoScaner.png'),
+                ),
+              ),
+            )
+          : StreamBuilder<User?>(
+              stream: FirebaseAuth.instance.authStateChanges(),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                if (snapshot.hasError) print(snapshot.error);
+                return (snapshot.hasError ||
+                        snapshot.connectionState == ConnectionState.active &&
+                            !snapshot.hasData)
+                    ? const LoginPage()
+                    : const App();
+              },
+            ),
     );
   }
 }

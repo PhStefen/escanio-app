@@ -1,4 +1,3 @@
-import 'package:escanio_app/components/my_card.dart';
 import 'package:escanio_app/services/firebase.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -82,7 +81,6 @@ class _UserPageState extends State<UserPage> {
             ),
           ),
         ),
-        MyCard(),
       ],
     );
   }

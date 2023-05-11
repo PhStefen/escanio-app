@@ -1,5 +1,5 @@
 import 'package:escanio_app/components/product_card.dart';
-import 'package:escanio_app/services/history.dart';
+import 'package:escanio_app/services/history_service.dart';
 import 'package:escanio_app/utils/string_utils.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
