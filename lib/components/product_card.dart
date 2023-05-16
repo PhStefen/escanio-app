@@ -5,7 +5,7 @@ import 'package:escanio_app/models/products.dart';
 import 'package:escanio_app/services/favorites_service.dart';
 import 'package:escanio_app/services/products_service.dart';
 import 'package:escanio_app/utils/string_utils.dart';
-import 'package:escanio_app/view/home/home_page.dart';
+import 'package:escanio_app/view/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 

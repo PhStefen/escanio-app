@@ -1,12 +1,12 @@
 import 'dart:ui';
 
 import 'package:escanio_app/services/firebase.dart';
-import 'package:escanio_app/view/favorites/favorites_page.dart';
+import 'package:escanio_app/view/favorites_page.dart';
 import 'package:escanio_app/view/login_page.dart';
 import 'package:escanio_app/view/scanner_page.dart';
 import 'package:escanio_app/view/user_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:escanio_app/view/home/home_page.dart';
+import 'package:escanio_app/view/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:widget_toolkit/widget_toolkit.dart';
 import 'package:widget_toolkit_qr/widget_toolkit_qr.dart';
@@ -65,7 +65,6 @@ class _MyAppState extends State<MyApp> {
       home: showSplash
           ? Container(
               decoration: const BoxDecoration(
-                // color: Colors.black,
                 image: DecorationImage(
                   image: AssetImage('images/LogoScaner.png'),
                 ),
@@ -75,9 +74,7 @@ class _MyAppState extends State<MyApp> {
               stream: FirebaseAuth.instance.authStateChanges(),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 if (snapshot.hasError) print(snapshot.error);
-                return (snapshot.hasError ||
-                        snapshot.connectionState == ConnectionState.active &&
-                            !snapshot.hasData)
+                return (snapshot.hasError || snapshot.connectionState == ConnectionState.active && !snapshot.hasData)
                     ? const LoginPage()
                     : const App();
               },
@@ -113,6 +110,12 @@ class _AppState extends State<App> {
     });
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    _pageController.dispose();
+  }
+
   static final List<Widget> _pages = <Widget>[
     const HomePage(),
     const FavoritesPage(),
@@ -137,8 +140,7 @@ class _AppState extends State<App> {
             label: "Home",
           ),
           BottomNavigationBarItem(
-            icon: Icon(
-                _selectedIndex == 1 ? Icons.favorite : Icons.favorite_border),
+            icon: Icon(_selectedIndex == 1 ? Icons.favorite : Icons.favorite_border),
             label: "Favoritos",
           ),
           const BottomNavigationBarItem(
