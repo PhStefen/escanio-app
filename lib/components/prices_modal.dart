@@ -49,7 +49,10 @@ class PricesModal extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                           child: Text(
                             name,
-                            style: const TextStyle(fontWeight: FontWeight.bold),
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       ),
@@ -81,7 +84,7 @@ class PricesModal extends StatelessWidget {
                               itemBuilder: (context, index) {
                                 var price = prices[index];
 
-                                var icon;
+                                Icon? icon;
                                 if (index != prices.length - 1) {
                                   var previousValue = prices[index + 1].value;
                                   var currentValue = price.value;
