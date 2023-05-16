@@ -19,15 +19,14 @@ class HistoryService {
         .doc(id)
         .collection("items")
         .withConverter<HistoryItem>(
-          fromFirestore: (snapshot, _) =>
-              HistoryItem.fromJson({...snapshot.data()!, "id": snapshot.id}),
+          fromFirestore: (snapshot, _) => HistoryItem.fromJson({...snapshot.data()!, "id": snapshot.id}),
           toFirestore: (model, _) => model.toJson(),
         )
-        .orderBy("createdAt")
+        .orderBy("createdAt", descending: true)
         .snapshots();
   }
 
   static Query<History> getAll() {
-    return collection.orderBy("createdAt");
+    return collection.orderBy("createdAt", descending: true);
   }
 }

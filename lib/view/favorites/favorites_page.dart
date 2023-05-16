@@ -43,10 +43,11 @@ class _FavoritesPageState extends State<FavoritesPage> {
                     const Padding(padding: EdgeInsets.only(left: 8)),
                     const Expanded(
                       child: TextField(
-                          decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: "Pesquise o nome ou código do produtos",
-                      )),
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: "Pesquise o nome ou código do produtos",
+                        ),
+                      ),
                     ),
                     const Padding(padding: EdgeInsets.symmetric(horizontal: 8)),
                     IconButton(

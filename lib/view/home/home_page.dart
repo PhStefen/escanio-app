@@ -71,7 +71,6 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
-          const Padding(padding: EdgeInsets.symmetric(vertical: 8)),
           Expanded(
             child: FirestoreListView(
               query: HistoryService.getAll(),
@@ -90,6 +89,7 @@ class _HomePageState extends State<HomePage> {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        const SizedBox(height: 12),
                         Text(
                           StringUtils.toCamelCase(
                             timeago.format(
@@ -99,7 +99,6 @@ class _HomePageState extends State<HomePage> {
                           ),
                           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
                         ),
-                        const SizedBox(height: 16),
                         ...snapshot.data!.docs.map((e) => ProductCard(productId: e.id)),
                       ],
                     );

@@ -39,26 +39,21 @@ class _LoginPageState extends State<LoginPage> {
                     width: 300,
                     child: ElevatedButton(
                       style: ButtonStyle(
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(50),
                             // side: BorderSide(color: Colors.white),
                           ),
                         ),
-                        backgroundColor:
-                            MaterialStateProperty.resolveWith<Color>(
+                        backgroundColor: MaterialStateProperty.resolveWith<Color>(
                           (Set<MaterialState> states) {
                             if (states.contains(MaterialState.disabled)) {
-                              return Colors
-                                  .grey; // Define a cor do botão desabilitado como cinza
+                              return Colors.grey; // Define a cor do botão desabilitado como cinza
                             }
-                            return Colors
-                                .green; // Define a cor do botão habilitado como verde
+                            return Theme.of(context).colorScheme.primary; // Define a cor do botão habilitado como verde
                           },
                         ),
-                        foregroundColor:
-                            MaterialStateProperty.all<Color>(Colors.white),
+                        foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
                       ),
                       // onPressed: null,
                       onPressed: /*loading ? null : */ () {
@@ -99,26 +94,21 @@ class _LoginPageState extends State<LoginPage> {
                       width: 300,
                       child: ElevatedButton(
                         style: ButtonStyle(
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(50),
                               // side: BorderSide(color: Colors.white),
                             ),
                           ),
-                          backgroundColor:
-                              MaterialStateProperty.resolveWith<Color>(
+                          backgroundColor: MaterialStateProperty.resolveWith<Color>(
                             (Set<MaterialState> states) {
                               if (states.contains(MaterialState.disabled)) {
-                                return Colors
-                                    .grey; // Define a cor do botão desabilitado como cinza
+                                return Colors.grey; // Define a cor do botão desabilitado como cinza
                               }
-                              return Colors
-                                  .green; // Define a cor do botão habilitado como verde
+                              return Theme.of(context).colorScheme.primary; // Define a cor do botão habilitado como verde
                             },
                           ),
-                          foregroundColor:
-                              MaterialStateProperty.all<Color>(Colors.white),
+                          foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
                         ),
                         onPressed: /*loading ? null : */ () {
                           setState(() {
