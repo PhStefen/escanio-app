@@ -10,7 +10,11 @@ class PricesModal extends StatelessWidget {
   final String name;
   final pricesList = <Price>[];
 
-  PricesModal({super.key, required this.context, required this.name, required this.reference});
+  PricesModal(
+      {super.key,
+      required this.context,
+      required this.name,
+      required this.reference});
 
   @override
   Widget build(BuildContext context) => GestureDetector(
@@ -22,7 +26,8 @@ class PricesModal extends StatelessWidget {
           maxChildSize: .7,
           builder: (context, scrollController) => Container(
             decoration: BoxDecoration(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(16)),
               color: Theme.of(context).cardColor,
             ),
             child: Stack(
@@ -35,7 +40,8 @@ class PricesModal extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                   child: Column(
                     children: [
                       const SizedBox(height: 5),
@@ -45,7 +51,8 @@ class PricesModal extends StatelessWidget {
                             color: Theme.of(context).colorScheme.primary,
                             borderRadius: BorderRadius.circular(50),
                           ),
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 4),
                           child: Text(
                             name,
                             style: const TextStyle(
@@ -61,7 +68,8 @@ class PricesModal extends StatelessWidget {
                               .collection("prices")
                               .orderBy("date", descending: true)
                               .withConverter<Price>(
-                                fromFirestore: (snapshot, _) => Price.fromJson(snapshot.data()!),
+                                fromFirestore: (snapshot, _) =>
+                                    Price.fromJson(snapshot.data()!),
                                 toFirestore: (model, _) => model.toJson(),
                               )
                               .get(),
@@ -72,13 +80,17 @@ class PricesModal extends StatelessWidget {
 
                             if (snapshot.data!.docs.isEmpty) {
                               return const Center(
-                                child: Text("Sem preço", style: TextStyle(color: Colors.grey)),
+                                child: Text("Sem preço",
+                                    style: TextStyle(color: Colors.grey)),
                               );
                             }
 
-                            var prices = snapshot.data!.docs.map((e) => e.data()).toList();
+                            var prices = snapshot.data!.docs
+                                .map((e) => e.data())
+                                .toList();
                             return ListView.separated(
-                              separatorBuilder: (context, index) => const Divider(),
+                              separatorBuilder: (context, index) =>
+                                  const Divider(),
                               itemCount: prices.length,
                               itemBuilder: (context, index) {
                                 var price = prices[index];
@@ -108,7 +120,8 @@ class PricesModal extends StatelessWidget {
                                       symbol: 'R\$',
                                     ).format(price.value),
                                   ),
-                                  subtitle: Text(DateFormat("dd/MM/yyyy").format(price.date.toDate())),
+                                  subtitle: Text(DateFormat("dd/MM/yyyy")
+                                      .format(price.date.toDate())),
                                   trailing: icon,
                                 );
                               },

@@ -13,7 +13,8 @@ class FavoritesPage extends StatefulWidget {
   State<FavoritesPage> createState() => _FavoritesPageState();
 }
 
-class _FavoritesPageState extends State<FavoritesPage> with AutomaticKeepAliveClientMixin<FavoritesPage> {
+class _FavoritesPageState extends State<FavoritesPage>
+    with AutomaticKeepAliveClientMixin<FavoritesPage> {
   @override
   bool get wantKeepAlive => true;
 
@@ -65,7 +66,8 @@ class _FavoritesPageState extends State<FavoritesPage> with AutomaticKeepAliveCl
                     ),
                     const Padding(padding: EdgeInsets.symmetric(horizontal: 8)),
                     IconButton(
-                      icon: Icon(Icons.qr_code_rounded, color: Colors.grey.shade600),
+                      icon: Icon(Icons.qr_code_rounded,
+                          color: Colors.grey.shade600),
                       onPressed: () {
                         Navigator.of(context).pushNamed("/scanner");
                       },
@@ -78,16 +80,39 @@ class _FavoritesPageState extends State<FavoritesPage> with AutomaticKeepAliveCl
           ),
           const SizedBox(height: 26),
           Expanded(
-            child: FirestoreListView(
-              query: FavoritesService.getAll(),
-              emptyBuilder: (_) => const Center(
-                child: Text("Nenhum produto foi escâneado ainda"),
-              ),
-              errorBuilder: (context, error, stackTrace) => Text(error.toString()),
-              itemBuilder: (_, snapshot) {
-                return ProductCard(productId: snapshot.id);
+            child: StreamBuilder(
+              stream: FavoritesService.getAll().snapshots(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData)
+                  return  Center(
+                    child: SizedBox(
+                      height: 36,
+                      width: 36,
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+
+                var products = snapshot.data!.docs;
+                print(products.length);
+                return ListView(
+                  children: products
+                      .map((e) => ProductCard(productId: e.id))
+                      .toList(),
+                );
               },
             ),
+            // child: FirestoreListView(
+            //   query: FavoritesService.getAll(),
+            //   emptyBuilder: (_) => const Center(
+            //     child: Text("Nenhum produto foi escâneado ainda"),
+            //   ),
+            //   errorBuilder: (context, error, stackTrace) => Text(error.toString()),
+            //   itemBuilder: (_, snapshot) {
+            //     print("1");
+
+            //     return ProductCard(productId: snapshot.id);
+            //   },
+            // ),
           ),
         ],
       ),

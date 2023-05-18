@@ -134,7 +134,7 @@ class _AppState extends State<App> {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.red.shade900,
+        backgroundColor: Theme.of(context).colorScheme.primary,
         items: [
           BottomNavigationBarItem(
             icon: Icon(
