@@ -83,7 +83,14 @@ class _FavoritesPageState extends State<FavoritesPage>
             child: StreamBuilder(
               stream: FavoritesService.getAll().snapshots(),
               builder: (context, snapshot) {
-                if (!snapshot.hasData) return const CircularProgressIndicator();
+                if (!snapshot.hasData)
+                  return  Center(
+                    child: SizedBox(
+                      height: 36,
+                      width: 36,
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
 
                 var products = snapshot.data!.docs;
                 print(products.length);
