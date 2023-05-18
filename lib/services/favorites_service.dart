@@ -8,7 +8,7 @@ class FavoritesService {
       .doc("bHI3ZZCNJUcItrdVhIMquKXv9Mk2")
       .collection("favorites");
 
-  static getAll() {
+  static Query<Map<String, dynamic>> getAll() {
     return collection.orderBy("createdAt");
   }
 
