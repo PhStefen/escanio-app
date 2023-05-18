@@ -6,11 +6,11 @@ class Price {
   Price.fromJson(Map<String, Object?> json)
       : this(
           date: json['date']! as Timestamp,
-          value: json['value']! as double,
+          value: json['value']! as num,
         );
 
   final Timestamp date;
-  final double value;
+  final num value;
   Map<String, Object?> toJson() {
     return {
       'date': date,

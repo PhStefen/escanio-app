@@ -1,4 +1,5 @@
 import 'package:escanio_app/components/product_card.dart';
+import 'package:escanio_app/services/favorites_service.dart';
 import 'package:escanio_app/services/history_service.dart';
 import 'package:escanio_app/utils/string_utils.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
@@ -12,7 +13,8 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin<HomePage> {
+class _HomePageState extends State<HomePage>
+    with AutomaticKeepAliveClientMixin<HomePage> {
   @override
   bool get wantKeepAlive => true;
   String pesquisa = '';
@@ -63,7 +65,8 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin<
                     ),
                     const Padding(padding: EdgeInsets.symmetric(horizontal: 8)),
                     IconButton(
-                      icon: Icon(Icons.qr_code_rounded, color: Colors.grey.shade600),
+                      icon: Icon(Icons.qr_code_rounded,
+                          color: Colors.grey.shade600),
                       onPressed: () {
                         Navigator.of(context).pushNamed("/scanner");
                       },
@@ -75,40 +78,68 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin<
             ),
           ),
           Expanded(
-            child: FirestoreListView(
-              query: HistoryService.getAll(),
-              emptyBuilder: (_) => const Center(
-                child: Text("Nenhum produto foi escâneado ainda"),
-              ),
-              errorBuilder: (context, error, stackTrace) => Text(error.toString()),
-              itemBuilder: (_, snapshot) {
-                var history = snapshot.data();
-                return StreamBuilder(
-                  stream: HistoryService.getItems(snapshot.id),
-                  builder: (_, snapshot) {
-                    if (!snapshot.hasData) {
-                      return Container();
+            child: StreamBuilder(
+              stream: HistoryService.getAll(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return CircularProgressIndicator();
+                }
+
+                var groups = <DateTime>[];
+                var docs = snapshot.data!.docs;
+
+                return ListView.builder(
+                  itemCount: docs.length,
+                  itemBuilder: (context, index) {
+                    var children = <Widget>[];
+                    var history = docs[index].data();
+
+                    if (groups.isEmpty ||
+                        history.lastUpdate.toDate() != groups.last) {
+                      groups.add(history.lastUpdate.toDate());
+                      children.add(Text(groups.last.toString()));
                     }
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 12),
-                        Text(
-                          StringUtils.toCamelCase(
-                            timeago.format(
-                              history.createdAt.toDate(),
-                              locale: "pt_BR",
-                            ),
-                          ),
-                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-                        ),
-                        ...snapshot.data!.docs.map((e) => ProductCard(productId: e.id)),
-                      ],
-                    );
+
+                    children.add(ProductCard(productId: history.id));
+                    return Column(children: children);
                   },
                 );
               },
             ),
+            // child: FirestoreListView(
+            //   query: HistoryService.getAll(),
+            //   emptyBuilder: (_) => const Center(
+            //     child: Text("Nenhum produto foi escâneado ainda"),
+            //   ),
+            //   errorBuilder: (context, error, stackTrace) => Text(error.toString()),
+            //   itemBuilder: (_, snapshot) {
+            //     var history = snapshot.data();
+            //     return StreamBuilder(
+            //       stream: HistoryService.getItems(snapshot.id),
+            //       builder: (_, snapshot) {
+            //         if (!snapshot.hasData) {
+            //           return Container();
+            //         }
+            //         return Column(
+            //           crossAxisAlignment: CrossAxisAlignment.start,
+            //           children: [
+            //             const SizedBox(height: 12),
+            //             Text(
+            //               StringUtils.toCamelCase(
+            //                 timeago.format(
+            //                   history.createdAt.toDate(),
+            //                   locale: "pt_BR",
+            //                 ),
+            //               ),
+            //               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+            //             ),
+            //             ...snapshot.data!.docs.map((e) => ProductCard(productId: e.id)),
+            //           ],
+            //         );
+            //       },
+            //     );
+            //   },
+            // ),
           ),
         ],
       ),

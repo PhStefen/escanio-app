@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:escanio_app/models/price.dart';
 import 'package:escanio_app/models/products.dart';
-import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
