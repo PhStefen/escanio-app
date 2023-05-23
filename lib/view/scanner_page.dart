@@ -1,5 +1,4 @@
 import 'package:camera/camera.dart';
-import 'package:escanio_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
 
@@ -15,6 +14,19 @@ class _ScannerPageState extends State<ScannerPage> with WidgetsBindingObserver {
   BarcodeScanner? scanner;
 
   bool _isCameraInitialized = false;
+
+  void getBackCamera() async {
+    try {
+      var camera = (await availableCameras()).first;
+      if (mounted) {
+        setState(() {
+          initCamera(camera);
+        });
+      }
+    } on CameraException catch (e) {
+      print('Error in fetching the cameras: $e');
+    }
+  }
 
   void initCamera(CameraDescription cameraDescription) async {
     final cameraController = CameraController(
@@ -71,7 +83,7 @@ class _ScannerPageState extends State<ScannerPage> with WidgetsBindingObserver {
 
   @override
   void initState() {
-    initCamera(cameras[0]);
+    getBackCamera();
     super.initState();
   }
 
@@ -84,9 +96,9 @@ class _ScannerPageState extends State<ScannerPage> with WidgetsBindingObserver {
       if (cameraController != null && cameraController.value.isInitialized) {
         cameraController.dispose();
       }
-      // barcodeScanner.close();
+      barcodeScanner?.close();
     } else if (state == AppLifecycleState.resumed) {
-      // initCamera(cameraController.description);
+      initCamera(cameraController!.description);
       initScanner();
     }
   }
@@ -94,6 +106,7 @@ class _ScannerPageState extends State<ScannerPage> with WidgetsBindingObserver {
   @override
   void dispose() {
     controller?.dispose();
+    scanner?.close();
     super.dispose();
   }
 

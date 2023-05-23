@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:escanio_app/models/history.dart';
-import 'package:escanio_app/services/firebase.dart';
+import 'package:escanio_app/services/firebase_service.dart';
 import 'package:flutter/material.dart';
 
 class HistoryService {

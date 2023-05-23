@@ -1,11 +1,8 @@
 import 'dart:ui';
 
-import 'package:camera/camera.dart';
 import 'package:escanio_app/models/history.dart';
-import 'package:escanio_app/models/products.dart';
-import 'package:escanio_app/services/firebase.dart';
+import 'package:escanio_app/services/firebase_service.dart';
 import 'package:escanio_app/services/history_service.dart';
-import 'package:escanio_app/services/products_service.dart';
 import 'package:escanio_app/view/favorites_page.dart';
 import 'package:escanio_app/view/login_page.dart';
 import 'package:escanio_app/view/scanner_page.dart';
@@ -14,15 +11,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:escanio_app/view/history_page.dart';
 import 'package:flutter/material.dart';
 
-List<CameraDescription> cameras = [];
-
-Future main() async {
-  try {
-    WidgetsFlutterBinding.ensureInitialized();
-    cameras = await availableCameras();
-  } on CameraException catch (e) {
-    print('Error in fetching the cameras: $e');
-  }
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 

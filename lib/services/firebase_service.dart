@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -42,14 +40,13 @@ class FirebaseService {
       accessToken: googleAuth?.accessToken,
       idToken: googleAuth?.idToken,
     );
-    // print('signInGoogle');
     await _auth.signInWithCredential(credential);
     _addUser();
   }
 
   static Future signInAnonymously() async {
-    // print('signInAnonymously');
     await _auth.signInAnonymously();
+    _addUser();
   }
 
   static Future signOut() async {
@@ -58,6 +55,5 @@ class FirebaseService {
       futures.add(GoogleSignIn().signOut());
     }
     await Future.wait(futures);
-    // currentUser = null;
   }
 }

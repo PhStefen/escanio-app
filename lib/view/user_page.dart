@@ -1,8 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:escanio_app/services/firebase.dart';
+import 'package:escanio_app/services/firebase_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class UserPage extends StatefulWidget {
   const UserPage({super.key});
@@ -19,9 +18,7 @@ class _UserPageState extends State<UserPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    print(FirebaseService.getUser()!.isAnonymous);
   }
 
   @override

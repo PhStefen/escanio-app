@@ -1,5 +1,5 @@
 import 'package:escanio_app/models/products.dart';
-import 'package:escanio_app/services/firebase.dart';
+import 'package:escanio_app/services/firebase_service.dart';
 
 class ProductsService {
   static var collection =

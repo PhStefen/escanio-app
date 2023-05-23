@@ -1,4 +1,4 @@
-import 'package:escanio_app/services/firebase.dart';
+import 'package:escanio_app/services/firebase_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 

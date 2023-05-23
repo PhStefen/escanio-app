@@ -1,7 +1,7 @@
 import 'package:escanio_app/components/prices_modal.dart';
 import 'package:escanio_app/models/history.dart';
 import 'package:escanio_app/services/history_service.dart';
-import 'package:escanio_app/utils/string_utils.dart';
+import 'package:escanio_app/extensions/string_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -47,7 +47,7 @@ class ProductCard extends StatelessWidget {
                   direction: Axis.vertical,
                   children: [
                     Text(
-                      StringUtils.toCamelCase(history.name),
+                      history.name.toCamelCase(),
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                     Text(
