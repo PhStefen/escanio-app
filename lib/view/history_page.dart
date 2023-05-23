@@ -2,16 +2,18 @@ import 'package:escanio_app/components/product_card.dart';
 import 'package:escanio_app/models/history.dart';
 import 'package:flutter/material.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:escanio_app/extensions/iterable_extension.dart';
+import 'package:escanio_app/extensions/string_extension.dart';
 
-class FavoritesPage extends StatefulWidget {
-  final List<History> favourites;
-  const FavoritesPage({super.key, required this.favourites});
+class HistoryPage extends StatefulWidget {
+  const HistoryPage({super.key, required this.history});
+  final List<History> history;
 
   @override
-  State<FavoritesPage> createState() => _FavoritesPageState();
+  State<HistoryPage> createState() => _HistoryPageState();
 }
 
-class _FavoritesPageState extends State<FavoritesPage> {
+class _HistoryPageState extends State<HistoryPage> {
   String pesquisa = '';
 
   @override
@@ -71,12 +73,39 @@ class _FavoritesPageState extends State<FavoritesPage> {
               ),
             ),
           ),
-          const SizedBox(height: 26),
           Expanded(
-            child: ListView(
-              children: widget.favourites
-                  .map((e) => ProductCard(history: e))
-                  .toList(),
+            child: ListView.builder(
+              itemCount: widget.history.length,
+              itemBuilder: (context, index) {
+                var currentHistory = widget.history[index];
+                var nextHistory = widget.history.elementAtOrNull(index + 1);
+                var children = <Widget>[ProductCard(history: currentHistory)];
+                var isFirstItem = index == 0;
+
+                if (isFirstItem ||
+                    (nextHistory != null &&
+                        !DateUtils.isSameDay(currentHistory.lastSeen.toDate(),
+                            currentHistory.lastSeen.toDate()))) {
+                  children = [
+                    const SizedBox(height: 12),
+                    Text(
+                      timeago
+                          .format(
+                            currentHistory.lastSeen.toDate(),
+                            locale: "pt_BR",
+                          )
+                          .toCamelCase(),
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 12),
+                    ),
+                    ...children
+                  ];
+                }
+
+                return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: children);
+              },
             ),
           ),
         ],

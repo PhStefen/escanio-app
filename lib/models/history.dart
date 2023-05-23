@@ -1,32 +1,35 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:escanio_app/models/price.dart';
-import 'package:escanio_app/models/products.dart';
 
-class History extends Product {
+class History {
   History({
-    required String name,
-    required List<Price> prices,
-    required bool isFavourite,
-    required this.lastUpdate,
-  }) : super(name: name, prices: prices, isFavourite: isFavourite);
+    required this.id,
+    required this.name,
+    required this.price,
+    required this.lastSeen,
+    required this.isFavourite,
+  });
 
-  final Timestamp lastUpdate;
+  History.fromJson(Map<String, Object> json)
+      : this(
+          id: json['id'] as String,
+          name: json['name'] as String,
+          price: json['price'] as num,
+          isFavourite: json['isFavourite'] as bool,
+          lastSeen: json['lastSeen'] as Timestamp,
+        );
 
-  factory History.fromJson(Map<String, dynamic> json) {
-    return History(
-      name: json['name'] as String,
-      prices: (json['prices'] as List<dynamic>)
-          .map((json) => Price.fromJson(json))
-          .toList(),
-      isFavourite: json['isFavourite'] as bool,
-      lastUpdate: json['lastUpdate'] as Timestamp,
-    );
-  }
+  String id;
+  String name;
+  bool isFavourite;
+  num price;
+  Timestamp lastSeen;
 
-  @override
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = super.toJson();
-    data['lastUpdate'] = lastUpdate;
-    return data;
+  Map<String, Object> toJson() {
+    return {
+      'name': name,
+      'isFavourite': isFavourite,
+      'price': price,
+      'lastSeen': lastSeen,
+    };
   }
 }

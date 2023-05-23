@@ -1,13 +1,17 @@
 import 'dart:ui';
 
 import 'package:camera/camera.dart';
+import 'package:escanio_app/models/history.dart';
+import 'package:escanio_app/models/products.dart';
 import 'package:escanio_app/services/firebase.dart';
+import 'package:escanio_app/services/history_service.dart';
+import 'package:escanio_app/services/products_service.dart';
 import 'package:escanio_app/view/favorites_page.dart';
 import 'package:escanio_app/view/login_page.dart';
 import 'package:escanio_app/view/scanner_page.dart';
 import 'package:escanio_app/view/user_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:escanio_app/view/home_page.dart';
+import 'package:escanio_app/view/history_page.dart';
 import 'package:flutter/material.dart';
 
 List<CameraDescription> cameras = [];
@@ -34,7 +38,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     WidgetsFlutterBinding.ensureInitialized();
@@ -43,11 +46,9 @@ class _MyAppState extends State<MyApp> {
         }));
   }
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      // scrollBehavior: NoThumbScrollBehavior().copyWith(scrollbars: false),
       debugShowCheckedModeBanner: false,
       title: 'Escânio',
       theme: ThemeData.light().copyWith(
@@ -93,6 +94,7 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   int _selectedIndex = 0;
   final _pageController = PageController(initialPage: 0);
+  final history = <History>[];
 
   void _onTap(int index) {
     setState(() {
@@ -117,21 +119,30 @@ class _AppState extends State<App> {
     _pageController.dispose();
   }
 
-  static final List<Widget> _pages = <Widget>[
-    const HomePage(),
-    const FavoritesPage(),
-    const UserPage(),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: PageView(
-          controller: _pageController,
-          onPageChanged: _onPageChanged,
-          children: _pages,
-        ),
+        child: StreamBuilder(
+            stream: HistoryService.getAll(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) return const CircularProgressIndicator();
+              history.clear();
+              history.addAll(snapshot.data!.docs.map((e) => e.data()));
+              return PageView(
+                controller: _pageController,
+                onPageChanged: _onPageChanged,
+                children: [
+                  HistoryPage(history: history),
+                  FavoritesPage(
+                    favourites: history
+                        .where((element) => element.isFavourite)
+                        .toList(),
+                  ),
+                  const UserPage(),
+                ],
+              );
+            }),
       ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Theme.of(context).colorScheme.primary,

@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:escanio_app/models/history.dart';
-import 'package:escanio_app/models/products.dart';
 import 'package:escanio_app/services/firebase.dart';
 import 'package:flutter/material.dart';
 
@@ -19,12 +18,12 @@ class HistoryService {
       );
 
   static Stream<QuerySnapshot<History>> getAll() {
-    return collection.orderBy('lastUpdate', descending: true).snapshots();
+    return collection.orderBy('lastSeen', descending: true).snapshots();
   }
 
-  static void add(Product product) {
+  static void add(History product) {
     var history = History.fromJson({
-      'lastUpdate': DateUtils.dateOnly(DateTime.now()),
+      'lastSeen': DateUtils.dateOnly(DateTime.now()),
       ...product.toJson(),
     });
     collection.doc(product.id).set(history);
