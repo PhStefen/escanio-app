@@ -75,7 +75,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
           Expanded(
             child: ListView(
               children: widget.favourites
-                  .map((e) => ProductCard(history: e))
+                  .map((e) => ProductCard(history: e, search: pesquisa))
                   .toList(),
             ),
           ),

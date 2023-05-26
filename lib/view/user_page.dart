@@ -24,6 +24,8 @@ class _UserPageState extends State<UserPage> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Stack(
           alignment: Alignment.bottomCenter,
@@ -55,74 +57,74 @@ class _UserPageState extends State<UserPage> {
                 const SizedBox(height: 50),
               ],
             ),
+            //Imagem de Perfil
             Positioned(
               bottom: 0,
               child: ClipOval(
                 child: Container(
-                  padding: const EdgeInsets.all(5),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(144 / 2),
-                    border: Border.all(
-                      color: Theme.of(context).colorScheme.primary,
-                      width: 3,
-                    ),
+                    borderRadius: BorderRadius.circular(140 / 2),
+                    border: currentUser!.isAnonymous
+                        ? Border.all(
+                            color: Theme.of(context).colorScheme.primary,
+                            width: 3,
+                          )
+                        : null,
                     color: Colors.white,
                   ),
-                  height: 144,
-                  width: 144,
+                  height: 140,
+                  width: 140,
                   child: currentUser!.isAnonymous
                       ? Image.asset(
                           'images/anonymous512.png',
-                          height: 144,
-                          width: 144,
+                          height: 140,
+                          width: 140,
                         )
                       : Image.network(
                           FirebaseAuth.instance.currentUser!.photoURL
                               .toString(),
                           fit: BoxFit.cover,
-                          height: 144,
-                          width: 144,
+                          height: 140,
+                          width: 140,
                         ),
                 ),
               ),
             ),
           ],
         ),
-        Column(
-          children: [
-            //Botão Teste
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                style: ButtonStyle(
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(50),
-                      // side: BorderSide(color: Colors.white),
-                    ),
-                  ),
-                  backgroundColor: MaterialStateProperty.all<Color>(
-                      Theme.of(context).colorScheme.primary),
+        const SizedBox(height: 20),
+        Expanded(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              //Botão Favorito
+              Container(
+                width: double.infinity,
+                margin: const EdgeInsets.symmetric(horizontal: 20),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primary,
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                onPressed: null,
-                // onPressed: FirebaseService.signOut,
                 child: SizedBox(
                   height: 50,
                   child: Stack(
                     children: [
                       const Positioned(
-                        left: 0,
+                        right: 0,
                         child: SizedBox(
                           height: 50,
                           width: 50,
+                          child:
+                              Icon(Icons.favorite_outline, color: Colors.white),
                         ),
                       ),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: const [
+                              SizedBox(width: 20),
                               Text(
                                 "Favoritos",
                                 style: TextStyle(
@@ -139,54 +141,43 @@ class _UserPageState extends State<UserPage> {
                   ),
                 ),
               ),
-            ),
-            //Botão Sair
-            SizedBox(
-              width: 250,
-              child: ElevatedButton(
-                style: ButtonStyle(
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(50),
-                      // side: BorderSide(color: Colors.white),
-                    ),
-                  ),
-                  backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                    (Set<MaterialState> states) {
-                      if (states.contains(MaterialState.disabled)) {
-                        return Colors
-                            .grey; // Define a cor do botão desabilitado como cinza
-                      }
-                      return Theme.of(context)
-                          .colorScheme
-                          .primary; // Define a cor do botão habilitado como verde
-                    },
-                  ),
-                  foregroundColor:
-                      MaterialStateProperty.all<Color>(Colors.white),
+
+              const SizedBox(height: 20),
+
+              //Botão Histórico
+              Container(
+                width: double.infinity,
+                margin: const EdgeInsets.symmetric(horizontal: 20),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primary,
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                onPressed: FirebaseService.signOut,
                 child: SizedBox(
                   height: 50,
                   child: Stack(
                     children: [
                       const Positioned(
-                        left: 0,
+                        right: 0,
                         child: SizedBox(
                           height: 50,
                           width: 50,
-                          child: Icon(Icons.login_rounded),
+                          child: Icon(Icons.history, color: Colors.white),
                         ),
                       ),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: const [
+                              SizedBox(width: 20),
                               Text(
-                                "Fazer logout",
-                                style: TextStyle(fontSize: 20),
+                                "Histórico",
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ],
                           ),
@@ -196,120 +187,85 @@ class _UserPageState extends State<UserPage> {
                   ),
                 ),
               ),
-            ),
-          ],
-        ),
-      ],
-    );
-    Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        SizedBox(
-          width: 250,
-          child: Card(
-            shape: const RoundedRectangleBorder(
-              side: BorderSide(
-                color: Colors.grey,
-              ),
-              borderRadius: BorderRadius.all(Radius.circular(12)),
-            ),
-            child: currentUser!.isAnonymous
-                ? Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      children: [
-                        ClipOval(
-                          child: Image.asset(
-                            'images/anonymous512.png',
-                            height: 200,
+
+              //Botão Sair
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      margin: const EdgeInsets.symmetric(horizontal: 20),
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              // side: BorderSide(color: Colors.white),
+                            ),
+                          ),
+                          backgroundColor:
+                              MaterialStateProperty.resolveWith<Color>(
+                            (Set<MaterialState> states) {
+                              if (states.contains(MaterialState.disabled)) {
+                                return Colors
+                                    .grey; // Define a cor do botão desabilitado como cinza
+                              }
+                              return Colors.white; // Define a cor do botão habilitado como verde
+                            },
+                          ),
+                          foregroundColor:
+                              MaterialStateProperty.all<Color>(Colors.white),
+                        ),
+                        onPressed: FirebaseService.signOut,
+                        child: SizedBox(
+                          height: 50,
+                          child: Stack(
+                            children: [
+                              Positioned(
+                                right: 0,
+                                child: SizedBox(
+                                  height: 50,
+                                  width: 50,
+                                  child: Icon(
+                                    Icons.login_rounded,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                  ),
+                                ),
+                              ),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      const SizedBox(width: 5),
+                                      Text(
+                                        "Sair",
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
                         ),
-                        const Text("Anônimo"),
-                      ],
+                      ),
                     ),
-                  )
-                : Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      children: [
-                        ClipOval(
-                            child: Image.network(
-                          FirebaseAuth.instance.currentUser!.photoURL
-                              .toString(),
-                          fit: BoxFit.cover,
-                          height: 200,
-                        )),
-                        Text(
-                          currentUser!.displayName!,
-                          style: const TextStyle(
-                            fontSize: 30,
-                          ),
-                        ),
-                        // Text(
-                        //   "Email: ${FirebaseAuth.instance.currentUser!.email.toString()}",
-                        //   style: const TextStyle(
-                        //     fontSize: 20,
-                        //     fontWeight: FontWeight.bold,
-                        //   ),
-                        // ),
-                      ],
-                    ),
-                  ),
-          ),
-        ),
-        SizedBox(
-          width: 250,
-          child: ElevatedButton(
-            style: ButtonStyle(
-              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(50),
-                  // side: BorderSide(color: Colors.white),
+                  ],
                 ),
               ),
-              backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                (Set<MaterialState> states) {
-                  if (states.contains(MaterialState.disabled)) {
-                    return Colors
-                        .grey; // Define a cor do botão desabilitado como cinza
-                  }
-                  return Theme.of(context)
-                      .colorScheme
-                      .primary; // Define a cor do botão habilitado como verde
-                },
-              ),
-              foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-            ),
-            onPressed: FirebaseService.signOut,
-            child: SizedBox(
-              height: 50,
-              child: Stack(
-                children: [
-                  const Positioned(
-                    left: 0,
-                    child: SizedBox(
-                      height: 50,
-                      width: 50,
-                      child: Icon(Icons.login_rounded),
-                    ),
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Text(
-                            "Fazer logout",
-                            style: TextStyle(fontSize: 20),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
+              const SizedBox(height: 20),
+            ],
           ),
         ),
       ],

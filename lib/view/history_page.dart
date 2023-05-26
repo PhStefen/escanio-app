@@ -79,7 +79,7 @@ class _HistoryPageState extends State<HistoryPage> {
               itemBuilder: (context, index) {
                 var currentHistory = widget.history[index];
                 var nextHistory = widget.history.elementAtOrNull(index + 1);
-                var children = <Widget>[ProductCard(history: currentHistory)];
+                var children = <Widget>[ProductCard(history: currentHistory, search: pesquisa)];
                 var isFirstItem = index == 0;
 
                 if (isFirstItem ||

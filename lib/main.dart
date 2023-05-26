@@ -116,7 +116,15 @@ class _AppState extends State<App> {
         child: StreamBuilder(
             stream: HistoryService.getAll(),
             builder: (context, snapshot) {
-              if (!snapshot.hasData) return const CircularProgressIndicator();
+              if (!snapshot.hasData) {
+                return const Center(
+                  child: SizedBox(
+                    height: 36,
+                    width: 36,
+                    child: CircularProgressIndicator(),
+                  ),
+                );
+              }
               print(snapshot.data!.docs);
               history.clear();
               history.addAll(snapshot.data!.docs.map((e) => e.data()));

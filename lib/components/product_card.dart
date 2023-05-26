@@ -7,7 +7,8 @@ import 'package:intl/intl.dart';
 
 class ProductCard extends StatelessWidget {
   final History history;
-  const ProductCard({super.key, required this.history});
+  final String search;
+  const ProductCard({super.key, required this.history, required this.search});
 
   void onTap() {
     history.isFavourite = !history.isFavourite;
