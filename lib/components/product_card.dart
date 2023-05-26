@@ -5,14 +5,27 @@ import 'package:escanio_app/extensions/string_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class ProductCard extends StatelessWidget {
+class ProductCard extends StatefulWidget {
   final History history;
   final String search;
   const ProductCard({super.key, required this.history, required this.search});
 
+  @override
+  State<ProductCard> createState() => _ProductCardState();
+}
+
+class _ProductCardState extends State<ProductCard> {
   void onTap() {
-    history.isFavourite = !history.isFavourite;
-    HistoryService.collection.doc(history.id).set(history);
+    widget.history.isFavourite = !widget.history.isFavourite;
+    HistoryService.collection.doc(widget.history.id).set(widget.history);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    if(widget.history.name.contains(widget.search)){
+      
+    }
   }
 
   @override
@@ -34,7 +47,7 @@ class ProductCard extends StatelessWidget {
                   topLeft: Radius.circular(16), topRight: Radius.circular(16)),
             ),
             builder: (context) =>
-                PricesModal(context: context, productId: history.id),
+                PricesModal(context: context, productId: widget.history.id),
           ),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
@@ -48,7 +61,7 @@ class ProductCard extends StatelessWidget {
                   direction: Axis.vertical,
                   children: [
                     Text(
-                      history.name.toCamelCase(),
+                      widget.history.name.toCamelCase(),
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                     Text(
@@ -56,13 +69,13 @@ class ProductCard extends StatelessWidget {
                         locale: 'pt_BR',
                         decimalDigits: 2,
                         symbol: 'R\$',
-                      ).format(history.price),
+                      ).format(widget.history.price),
                     )
                   ],
                 ),
                 GestureDetector(
                   onTap: onTap,
-                  child: history.isFavourite
+                  child: widget.history.isFavourite
                       ? const Icon(
                           Icons.favorite,
                           color: Colors.red,
