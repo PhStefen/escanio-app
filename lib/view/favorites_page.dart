@@ -74,9 +74,16 @@ class _FavoritesPageState extends State<FavoritesPage> {
           const SizedBox(height: 26),
           Expanded(
             child: ListView(
-              children: widget.favourites
-                  .map((e) => ProductCard(history: e, search: pesquisa))
-                  .toList(),
+              children: widget.favourites.map(
+                (e) {
+                  if (pesquisa.isEmpty) return ProductCard(history: e);
+                  if (e.name.contains(pesquisa)) {
+                    // print("pesquisa: $pesquisa, nome: ${e.name}");
+                    return ProductCard(history: e);
+                  }
+                  return const SizedBox.shrink();
+                },
+              ).toList(),
             ),
           ),
         ],
