@@ -47,16 +47,17 @@ class _HistoryPageState extends State<HistoryPage> {
                     const Icon(Icons.search_rounded),
                     const Padding(padding: EdgeInsets.only(left: 8)),
                     Expanded(
-                      child: TextField(
-                        decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          hintText: "Pesquise o nome ou código do produtos",
-                        ),
-                        onChanged: (value) {
-                          setState(() {
-                            pesquisa = value;
-                          });
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).pushNamed("/scanner");
                         },
+                        child: const TextField(
+                          enabled: false,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: "Pesquise o nome ou código do produtos",
+                          ),
+                        ),
                       ),
                     ),
                     const Padding(padding: EdgeInsets.symmetric(horizontal: 8)),
