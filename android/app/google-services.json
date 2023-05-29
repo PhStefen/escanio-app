@@ -22,6 +22,14 @@
           }
         },
         {
+          "client_id": "384208942515-aeqtaqce46v5k8g2veh22mdegvjt9ucn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.escanio_app",
+            "certificate_hash": "f914f3cb9d73834ff88de294c026afbd04395240"
+          }
+        },
+        {
           "client_id": "384208942515-g7isvgp8rrp7unk432354hdu7kqj2sqr.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
