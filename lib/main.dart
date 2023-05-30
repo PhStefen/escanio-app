@@ -10,9 +10,13 @@ import 'package:escanio_app/view/user_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:escanio_app/view/history_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
   runApp(const MyApp());
 }
 
@@ -46,6 +50,7 @@ class _MyAppState extends State<MyApp> {
       ),
       darkTheme: ThemeData.dark().copyWith(
         colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.red),
+        // scaffoldBackgroundColor: const Color.fromRGBO(27, 30, 35, 0.76),
       ),
       routes: {
         "/scanner": (context) => const ScannerPage(),
