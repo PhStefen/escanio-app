@@ -70,7 +70,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
               children: widget.favourites.map(
                 (e) {
                   if (pesquisa.isEmpty) return ProductCard(history: e);
-                  if (e.name.contains(pesquisa)) {
+                  if (e.name.toLowerCase().contains(pesquisa.toLowerCase())) {
                     // print("pesquisa: $pesquisa, nome: ${e.name}");
                     return ProductCard(history: e);
                   }

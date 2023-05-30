@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:escanio_app/models/history.dart';
 import 'package:escanio_app/services/firebase_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class UserPage extends StatefulWidget {
-  const UserPage({super.key});
+  final List<History> history;
+  const UserPage({super.key, required this.history});
 
   @override
   State<UserPage> createState() => _UserPageState();
@@ -33,20 +35,19 @@ class _UserPageState extends State<UserPage> {
             Column(
               children: [
                 Container(
-                  height: 150,
+                  height: 200,
                   width: double.infinity,
                   color: Theme.of(context).colorScheme.primary,
                   child: Align(
                     alignment: Alignment.topCenter,
                     child: Padding(
-                      padding: const EdgeInsetsDirectional.only(top: 30),
+                      padding: const EdgeInsetsDirectional.only(top: 54),
                       child: Text(
                         currentUser!.isAnonymous
                             ? 'Anônimo'
                             : FirebaseAuth.instance.currentUser!.displayName
                                 .toString(),
                         style: const TextStyle(
-                          fontWeight: FontWeight.bold,
                           color: Colors.white,
                           fontSize: 20,
                         ),
@@ -54,7 +55,7 @@ class _UserPageState extends State<UserPage> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 50),
+                const SizedBox(height: 40),
               ],
             ),
             //Imagem de Perfil
@@ -63,36 +64,33 @@ class _UserPageState extends State<UserPage> {
               child: ClipOval(
                 child: Container(
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(140 / 2),
-                    border: currentUser!.isAnonymous
-                        ? Border.all(
-                            color: Theme.of(context).colorScheme.primary,
-                            width: 3,
-                          )
-                        : null,
+                    borderRadius: BorderRadius.circular(132 / 2),
                     color: Colors.white,
                   ),
-                  height: 140,
-                  width: 140,
+                  height: 132,
+                  width: 132,
+                  padding: currentUser!.isAnonymous
+                      ? const EdgeInsets.all(16)
+                      : null,
                   child: currentUser!.isAnonymous
                       ? Image.asset(
                           'images/anonymous512.png',
-                          height: 140,
-                          width: 140,
+                          height: 132,
+                          width: 132,
                         )
                       : Image.network(
                           FirebaseAuth.instance.currentUser!.photoURL
                               .toString(),
                           fit: BoxFit.cover,
-                          height: 140,
-                          width: 140,
+                          height: 132,
+                          width: 132,
                         ),
                 ),
               ),
             ),
           ],
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 32),
         Expanded(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -109,13 +107,25 @@ class _UserPageState extends State<UserPage> {
                   height: 50,
                   child: Stack(
                     children: [
-                      const Positioned(
+                      Positioned(
                         right: 0,
-                        child: SizedBox(
-                          height: 50,
-                          width: 50,
-                          child:
-                              Icon(Icons.favorite_outline, color: Colors.white),
+                        child: Row(
+                          children: [
+                            Text(
+                              widget.history
+                                  .where((h) => h.isFavourite)
+                                  .length
+                                  .toString(),
+                            ),
+                            const SizedBox(
+                              height: 50,
+                              width: 50,
+                              child: Icon(
+                                Icons.favorite_outlined,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                       Column(
@@ -128,9 +138,8 @@ class _UserPageState extends State<UserPage> {
                               Text(
                                 "Favoritos",
                                 style: TextStyle(
-                                  fontSize: 20,
+                                  fontSize: 16,
                                   color: Colors.white,
-                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ],
@@ -142,7 +151,7 @@ class _UserPageState extends State<UserPage> {
                 ),
               ),
 
-              const SizedBox(height: 20),
+              const SizedBox(height: 12),
 
               //Botão Histórico
               Container(
@@ -156,12 +165,17 @@ class _UserPageState extends State<UserPage> {
                   height: 50,
                   child: Stack(
                     children: [
-                      const Positioned(
+                      Positioned(
                         right: 0,
-                        child: SizedBox(
-                          height: 50,
-                          width: 50,
-                          child: Icon(Icons.history, color: Colors.white),
+                        child: Row(
+                          children: [
+                            Text(widget.history.length.toString()),
+                            const SizedBox(
+                              height: 50,
+                              width: 50,
+                              child: Icon(Icons.history, color: Colors.white),
+                            ),
+                          ],
                         ),
                       ),
                       Column(
@@ -174,9 +188,8 @@ class _UserPageState extends State<UserPage> {
                               Text(
                                 "Histórico",
                                 style: TextStyle(
-                                  fontSize: 20,
+                                  fontSize: 16,
                                   color: Colors.white,
-                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ],
@@ -205,33 +218,22 @@ class _UserPageState extends State<UserPage> {
                               // side: BorderSide(color: Colors.white),
                             ),
                           ),
-                          backgroundColor:
-                              MaterialStateProperty.resolveWith<Color>(
-                            (Set<MaterialState> states) {
-                              if (states.contains(MaterialState.disabled)) {
-                                return Colors
-                                    .grey; // Define a cor do botão desabilitado como cinza
-                              }
-                              return Colors.white; // Define a cor do botão habilitado como verde
-                            },
-                          ),
-                          foregroundColor:
-                              MaterialStateProperty.all<Color>(Colors.white),
+                          backgroundColor: MaterialStateProperty.all(
+                              Theme.of(context).cardColor),
                         ),
                         onPressed: FirebaseService.signOut,
                         child: SizedBox(
                           height: 50,
                           child: Stack(
                             children: [
-                              Positioned(
+                              const Positioned(
                                 right: 0,
                                 child: SizedBox(
                                   height: 50,
                                   width: 50,
                                   child: Icon(
                                     Icons.login_rounded,
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
+                                    color: Colors.white,
                                   ),
                                 ),
                               ),
@@ -240,16 +242,13 @@ class _UserPageState extends State<UserPage> {
                                 children: [
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      const SizedBox(width: 5),
+                                    children: const [
+                                      SizedBox(width: 5),
                                       Text(
                                         "Sair",
                                         style: TextStyle(
-                                          fontSize: 20,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                          color: Colors.white,
                                         ),
                                       ),
                                     ],

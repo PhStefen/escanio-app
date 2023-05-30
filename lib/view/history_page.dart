@@ -61,13 +61,7 @@ class _HistoryPageState extends State<HistoryPage> {
                       ),
                     ),
                     const Padding(padding: EdgeInsets.symmetric(horizontal: 8)),
-                    IconButton(
-                      icon: Icon(Icons.qr_code_rounded,
-                          color: Colors.grey.shade600),
-                      onPressed: () {
-                        Navigator.of(context).pushNamed("/scanner");
-                      },
-                    ),
+                    const Icon(Icons.qr_code_rounded),
                     const Padding(padding: EdgeInsets.only(right: 8)),
                   ],
                 ),

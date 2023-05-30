@@ -10,7 +10,7 @@ import 'package:escanio_app/view/user_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:escanio_app/view/history_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+// import 'package:flutter/services.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,12 +45,16 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Escânio',
-      theme: ThemeData.light().copyWith(
+      // theme: ThemeData.light().copyWith(
+      //   colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.red),
+      // ),
+      theme: ThemeData.dark().copyWith(
         colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.red),
+        scaffoldBackgroundColor: const Color.fromRGBO(27, 30, 35, 0.76),
       ),
       darkTheme: ThemeData.dark().copyWith(
         colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.red),
-        // scaffoldBackgroundColor: const Color.fromRGBO(27, 30, 35, 0.76),
+        scaffoldBackgroundColor: const Color.fromRGBO(27, 30, 35, 0.76),
       ),
       routes: {
         "/scanner": (context) => const ScannerPage(),
@@ -69,9 +73,7 @@ class _MyAppState extends State<MyApp> {
               stream: FirebaseAuth.instance.authStateChanges(),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 if (snapshot.hasError) print(snapshot.error);
-                return (snapshot.hasError ||
-                        snapshot.connectionState == ConnectionState.active &&
-                            !snapshot.hasData)
+                return (snapshot.hasError || snapshot.connectionState == ConnectionState.active && !snapshot.hasData)
                     ? const LoginPage()
                     : const App();
               },
@@ -130,7 +132,6 @@ class _AppState extends State<App> {
                   ),
                 );
               }
-              print(snapshot.data!.docs);
               history.clear();
               history.addAll(snapshot.data!.docs.map((e) => e.data()));
               return PageView(
@@ -139,11 +140,9 @@ class _AppState extends State<App> {
                 children: [
                   HistoryPage(history: history),
                   FavoritesPage(
-                    favourites: history
-                        .where((element) => element.isFavourite)
-                        .toList(),
+                    favourites: history.where((element) => element.isFavourite).toList(),
                   ),
-                  const UserPage(),
+                  UserPage(history: history),
                 ],
               );
             }),
@@ -152,19 +151,15 @@ class _AppState extends State<App> {
         backgroundColor: Theme.of(context).colorScheme.primary,
         items: [
           BottomNavigationBarItem(
-            icon: Icon(
-                _selectedIndex == 0 ? Icons.home_rounded : Icons.home_outlined),
+            icon: Icon(_selectedIndex == 0 ? Icons.home_rounded : Icons.home_outlined),
             label: "Home",
           ),
           BottomNavigationBarItem(
-            icon: Icon(
-                _selectedIndex == 1 ? Icons.favorite : Icons.favorite_border),
+            icon: Icon(_selectedIndex == 1 ? Icons.favorite : Icons.favorite_border),
             label: "Favoritos",
           ),
           BottomNavigationBarItem(
-            icon: Icon(_selectedIndex == 2
-                ? Icons.person_rounded
-                : Icons.person_outline_rounded),
+            icon: Icon(_selectedIndex == 2 ? Icons.person_rounded : Icons.person_outline_rounded),
             label: "Conta",
           ),
         ],

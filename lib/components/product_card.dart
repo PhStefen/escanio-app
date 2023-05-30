@@ -20,10 +20,10 @@ class ProductCard extends StatelessWidget {
       width: double.infinity,
       child: Card(
         shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(12)),
+          borderRadius: BorderRadius.all(Radius.circular(16)),
         ),
         child: InkWell(
-          borderRadius: const BorderRadius.all(Radius.circular(12)),
+          borderRadius: const BorderRadius.all(Radius.circular(16)),
           onTap: () => showModalBottomSheet(
             isScrollControlled: true,
             context: context,
@@ -36,7 +36,7 @@ class ProductCard extends StatelessWidget {
                 PricesModal(context: context, productId: history.id),
           ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             child: Wrap(
               alignment: WrapAlignment.spaceBetween,
               crossAxisAlignment: WrapCrossAlignment.center,
