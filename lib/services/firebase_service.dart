@@ -20,9 +20,9 @@ class FirebaseService {
   static getUser() => _auth.currentUser;
 
   static Future init() async {
-    await Firebase.initializeApp(
-      options: kIsWeb ? _firebaseOptions : null,
-    );
+    // await Firebase.initializeApp(
+    //   options: kIsWeb ? _firebaseOptions : null,
+    // );
   }
 
   static Future _addUser() async {

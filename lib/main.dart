@@ -9,13 +9,18 @@ import 'package:escanio_app/view/scanner_page.dart';
 import 'package:escanio_app/view/user_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:escanio_app/view/history_page.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+
+import 'firebase_options.dart';
 // import 'package:flutter/services.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+    await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform);
 
   runApp(const MyApp());
 }
@@ -34,7 +39,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
 
-    WidgetsFlutterBinding.ensureInitialized();
+    // WidgetsFlutterBinding.ensureInitialized();
     FirebaseService.init().then((value) => setState(() {
           showSplash = false;
         }));
