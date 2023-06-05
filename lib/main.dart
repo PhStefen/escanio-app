@@ -1,3 +1,4 @@
+import 'package:camera/camera.dart';
 import 'package:escanio_app/pages/home_page.dart';
 import 'package:escanio_app/pages/login_page.dart';
 import 'package:escanio_app/pages/scanner_page.dart';
@@ -5,7 +6,10 @@ import 'package:escanio_app/services/firebase_service.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+List<CameraDescription> cameras = [];
+
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const App());
 }
 
@@ -19,14 +23,28 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   bool showSplash = true;
 
+  Future initFirebase() async {
+    await FirebaseService.init();
+  }
+
+  Future initCameras() async {
+    cameras = await availableCameras();
+  }
+
+  Future init() async {
+    await Future.wait([
+      initFirebase(),
+      initCameras(),
+    ]);
+    setState(() {
+      showSplash = false;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
-    FirebaseService.init().then((value) {
-      setState(() {
-        showSplash = false;
-      });
-    });
+    init();
   }
 
   @override

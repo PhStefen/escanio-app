@@ -2,7 +2,7 @@ import 'package:camera/camera.dart';
 import 'package:escanio_app/components/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
-// import 'package:google_ml_kit/google_ml_kit.dart';
+import 'package:escanio_app/main.dart';
 
 class ScannerPage extends StatefulWidget {
   const ScannerPage({super.key});
@@ -12,123 +12,99 @@ class ScannerPage extends StatefulWidget {
 }
 
 class _ScannerPageState extends State<ScannerPage> with WidgetsBindingObserver {
-  CameraController? controller;
-  BarcodeScanner? scanner;
+  final _barcodeScanner = BarcodeScanner();
+  bool _canProcess = true;
+  bool _isBusy = false;
 
-  bool _isCameraInitialized = false;
-
-  void getBackCamera() async {
-    try {
-      var camera = (await availableCameras()).first;
-      if (mounted) {
-        setState(() {
-          initCamera(camera);
-        });
-      }
-    } on CameraException catch (e) {
-      print('Error in fetching the cameras: $e');
-    }
-  }
-
-  void initCamera(CameraDescription cameraDescription) async {
-    final cameraController = CameraController(
-      cameraDescription,
-      ResolutionPreset.high,
-      imageFormatGroup: ImageFormatGroup.jpeg,
-      enableAudio: false,
-    );
-
-    if (mounted) {
-      setState(() {
-        controller = cameraController;
-      });
-    }
-
-    cameraController.addListener(() {
-      if (mounted) setState(() {});
-    });
-
-    try {
-      await cameraController.initialize();
-    } on CameraException catch (e) {
-      print('Error initializing camera: $e');
-    }
-
-    if (mounted) {
-      setState(() {
-        _isCameraInitialized = controller!.value.isInitialized;
-      });
-    }
-  }
-
-  void initScanner() {
-    scanner = BarcodeScanner(formats: [BarcodeFormat.all]);
-  }
-
-  // void processImage(InputImage image) async {
-  //   final barcodes = await scanner.processImage(image);
-
-  //   for (Barcode barcode in barcodes) {}
-  // }
-
-  void onViewFinderTap(TapDownDetails details, BoxConstraints constraints) {
-    if (controller == null) {
-      return;
-    }
-    final offset = Offset(
-      details.localPosition.dx / constraints.maxWidth,
-      details.localPosition.dy / constraints.maxHeight,
-    );
-    controller!.setExposurePoint(offset);
-    controller!.setFocusPoint(offset);
-  }
+  CameraController? _cameraController;
+  CameraDescription? camera;
 
   @override
   void initState() {
-    getBackCamera();
     super.initState();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    final CameraController? cameraController = controller;
-    // final BarcodeScanner? barcodeScanner = scanner;
-
-    if (state == AppLifecycleState.inactive) {
-      if (cameraController != null && cameraController.value.isInitialized) {
-        cameraController.dispose();
-      }
-      // barcodeScanner?.close();
-    } else if (state == AppLifecycleState.resumed) {
-      initCamera(cameraController!.description);
-      initScanner();
-    }
+    camera = cameras[0];
   }
 
   @override
   void dispose() {
-    controller?.dispose();
-    // scanner?.close();
+    _canProcess = false;
+    _barcodeScanner.close();
     super.dispose();
+  }
+
+  Future<void> _processImage(InputImage inputImage) async {
+    if (!_canProcess || _isBusy) return;
+    setState(() {
+      _isBusy = true;
+    });
+    final barcodes = await _barcodeScanner.processImage(inputImage);
+
+    for (final barcode in barcodes) {
+      print(barcode.rawValue);
+    }
+
+    if (mounted) {
+      setState(() {
+        _isBusy = false;
+      });
+    }
+  }
+
+  InputImage? _inputImageFromCameraImage(CameraImage image) {
+    final rotation =
+        InputImageRotationValue.fromRawValue(camera!.sensorOrientation);
+
+    if (rotation == null) {
+      return null;
+    }
+
+    final format = InputImageFormatValue.fromRawValue(image.format.raw);
+    if (format == null ||
+        format != InputImageFormat.nv21 ||
+        image.planes.length != 1) {
+      return null;
+    }
+
+    final plane = image.planes.first;
+    return InputImage.fromBytes(
+      bytes: plane.bytes,
+      metadata: InputImageMetadata(
+        size: Size(
+          image.width.toDouble(),
+          image.height.toDouble(),
+        ),
+        rotation: rotation,
+        format: format,
+        bytesPerRow: plane.bytesPerRow,
+      ),
+    );
+  }
+
+  void _processCameraImage(CameraImage image) {
+    final inputImage = _inputImageFromCameraImage(image);
+    if (inputImage == null) return;
+    _processImage(inputImage);
+  }
+
+  Future<void> _startLiveFeed() async {
+    _cameraController = CameraController(
+      camera!,
+      ResolutionPreset.high,
+      enableAudio: false,
+      imageFormatGroup: ImageFormatGroup.nv21,
+    );
+    await _cameraController?.initialize();
+    _cameraController?.startImageStream(_processCameraImage);
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: _isCameraInitialized
-            ? CameraPreview(
-                controller!,
-                child: LayoutBuilder(builder:
-                    (BuildContext context, BoxConstraints constraints) {
-                  return GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    onTapDown: (details) =>
-                        onViewFinderTap(details, constraints),
-                  );
-                }),
-              )
-            : const Loading(),
+        child: Placeholder(),
       ),
     );
   }
