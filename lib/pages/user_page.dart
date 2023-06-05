@@ -1,11 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:escanio_app/models/history.dart';
+import 'package:escanio_app/models/history_model.dart';
+import 'package:escanio_app/services/auth_service.dart';
 import 'package:escanio_app/services/firebase_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class UserPage extends StatefulWidget {
-  final List<History> history;
+  final List<HistoryModel> history;
   const UserPage({super.key, required this.history});
 
   @override
@@ -13,7 +14,7 @@ class UserPage extends StatefulWidget {
 }
 
 class _UserPageState extends State<UserPage> {
-  final currentUser = FirebaseService.getUser();
+  final currentUser = AuthService.user;
 
   //Criar produtos
   FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -221,7 +222,7 @@ class _UserPageState extends State<UserPage> {
                           backgroundColor: MaterialStateProperty.all(
                               Theme.of(context).cardColor),
                         ),
-                        onPressed: FirebaseService.signOut,
+                        onPressed: AuthService.signOut,
                         child: SizedBox(
                           height: 50,
                           child: Stack(

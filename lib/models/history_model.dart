@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class History {
-  History({
+class HistoryModel {
+  HistoryModel({
     required this.id,
     required this.name,
     required this.price,
@@ -9,7 +9,7 @@ class History {
     required this.isFavourite,
   });
 
-  History.fromJson(Map<String, Object> json)
+  HistoryModel.fromJson(Map<String, Object> json)
       : this(
           id: json['id'] as String,
           name: json['name'] as String,

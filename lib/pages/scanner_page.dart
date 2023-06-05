@@ -1,6 +1,8 @@
 import 'package:camera/camera.dart';
+import 'package:escanio_app/components/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
+// import 'package:google_ml_kit/google_ml_kit.dart';
 
 class ScannerPage extends StatefulWidget {
   const ScannerPage({super.key});
@@ -90,13 +92,13 @@ class _ScannerPageState extends State<ScannerPage> with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     final CameraController? cameraController = controller;
-    final BarcodeScanner? barcodeScanner = scanner;
+    // final BarcodeScanner? barcodeScanner = scanner;
 
     if (state == AppLifecycleState.inactive) {
       if (cameraController != null && cameraController.value.isInitialized) {
         cameraController.dispose();
       }
-      barcodeScanner?.close();
+      // barcodeScanner?.close();
     } else if (state == AppLifecycleState.resumed) {
       initCamera(cameraController!.description);
       initScanner();
@@ -106,25 +108,28 @@ class _ScannerPageState extends State<ScannerPage> with WidgetsBindingObserver {
   @override
   void dispose() {
     controller?.dispose();
-    scanner?.close();
+    // scanner?.close();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _isCameraInitialized
-          ? CameraPreview(
-              controller!,
-              child: LayoutBuilder(
-                  builder: (BuildContext context, BoxConstraints constraints) {
-                return GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onTapDown: (details) => onViewFinderTap(details, constraints),
-                );
-              }),
-            )
-          : Container(),
+      body: SafeArea(
+        child: _isCameraInitialized
+            ? CameraPreview(
+                controller!,
+                child: LayoutBuilder(builder:
+                    (BuildContext context, BoxConstraints constraints) {
+                  return GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTapDown: (details) =>
+                        onViewFinderTap(details, constraints),
+                  );
+                }),
+              )
+            : const Loading(),
+      ),
     );
   }
 }

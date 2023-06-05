@@ -1,12 +1,12 @@
 import 'package:escanio_app/components/prices_modal.dart';
-import 'package:escanio_app/models/history.dart';
-import 'package:escanio_app/services/history_service.dart';
+import 'package:escanio_app/models/history_model.dart';
 import 'package:escanio_app/extensions/string_extension.dart';
+import 'package:escanio_app/services/history_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class ProductCard extends StatelessWidget {
-  final History history;
+  final HistoryModel history;
   const ProductCard({super.key, required this.history});
 
   void onTap() {

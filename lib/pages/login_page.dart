@@ -1,4 +1,6 @@
-import 'package:escanio_app/services/firebase_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:escanio_app/components/loading.dart';
+import 'package:escanio_app/services/auth_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -10,7 +12,21 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  var loading = false;
+  bool loading = false;
+
+  Future signIn(bool googleSignIn) async {
+    setState(() {
+      loading = true;
+    });
+    await (googleSignIn
+        ? AuthService.signInGoogle()
+        : AuthService.signInAnonymously());
+        
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc(AuthService.user!.uid)
+        .set({});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,13 +36,7 @@ class _LoginPageState extends State<LoginPage> {
           height: double.infinity,
           width: double.infinity,
           child: loading
-              ? const Center(
-                  child: SizedBox(
-                    height: 36,
-                    width: 36,
-                    child: CircularProgressIndicator(),
-                  ),
-                )
+              ? const Loading()
               : Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -68,13 +78,7 @@ class _LoginPageState extends State<LoginPage> {
                               foregroundColor: MaterialStateProperty.all<Color>(
                                   Colors.white),
                             ),
-                            // onPressed: null,
-                            onPressed: /*loading ? null : */ () {
-                              setState(() {
-                                loading = true;
-                              });
-                              FirebaseService.signInAnonymously();
-                            },
+                            onPressed: () => signIn(false),
                             child: SizedBox(
                               height: 50,
                               child: Stack(
@@ -126,7 +130,6 @@ class _LoginPageState extends State<LoginPage> {
                                     RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(50),
-                                    // side: BorderSide(color: Colors.white),
                                   ),
                                 ),
                                 backgroundColor:
@@ -147,12 +150,7 @@ class _LoginPageState extends State<LoginPage> {
                                         Colors.white),
                               ),
                               // onPressed: null,
-                              onPressed: /*loading ? null : */ () {
-                                setState(() {
-                                  loading = true;
-                                });
-                                FirebaseService.signInGoogle();
-                              },
+                              onPressed: () => signIn(true),
                               child: SizedBox(
                                 height: 50,
                                 child: Stack(
@@ -206,3 +204,5 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 }
+
+

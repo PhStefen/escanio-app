@@ -1,5 +1,6 @@
+import 'package:escanio_app/components/loading.dart';
 import 'package:escanio_app/extensions/iterable_extension.dart';
-import 'package:escanio_app/services/products_service.dart';
+import 'package:escanio_app/services/product_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -37,10 +38,10 @@ class PricesModal extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                   child: FutureBuilder(
-                    future: ProductsService.collection.doc(productId).get(),
+                    future: ProductsService.get(productId),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) {
-                        return const CircularProgressIndicator();
+                        return const Loading();
                       }
 
                       var product = snapshot.data!.data()!;

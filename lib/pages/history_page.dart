@@ -1,5 +1,5 @@
 import 'package:escanio_app/components/product_card.dart';
-import 'package:escanio_app/models/history.dart';
+import 'package:escanio_app/models/history_model.dart';
 import 'package:flutter/material.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:escanio_app/extensions/iterable_extension.dart';
@@ -7,7 +7,7 @@ import 'package:escanio_app/extensions/string_extension.dart';
 
 class HistoryPage extends StatefulWidget {
   const HistoryPage({super.key, required this.history});
-  final List<History> history;
+  final List<HistoryModel> history;
 
   @override
   State<HistoryPage> createState() => _HistoryPageState();
