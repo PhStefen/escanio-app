@@ -43,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
                     Column(
                       children: [
                         Image.asset(
-                          'images/LogoScaner.png',
+                          'images/LogoScanner.png',
                           height: 300,
                         ),
                         const SizedBox(height: 100),

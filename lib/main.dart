@@ -72,14 +72,13 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
-    // return Container(
-    //   decoration: const BoxDecoration(
-    //     image: DecorationImage(
-    //       image: AssetImage("images/LogoScanner.png"),
-    //     ),
-    //   ),
-    // );
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage("images/LogoScanner.png"),
+        ),
+      ),
+    );
   }
 }
 

@@ -13,4 +13,16 @@ class ProductsService {
         )
         .get();
   }
+
+  static Future<QuerySnapshot<ProductModel>> scan(String barCode) {
+    return FirebaseFirestore.instance
+        .collection("products")
+        .where("barCode", isEqualTo: barCode)
+        .withConverter<ProductModel>(
+          fromFirestore: (snapshot, _) =>
+              ProductModel.fromJson({...snapshot.data()!, "id": snapshot.id}),
+          toFirestore: (model, _) => model.toJson(),
+        )
+        .get();
+  }
 }

@@ -6,7 +6,8 @@ class HistoryService {
   static CollectionReference<HistoryModel> get collection =>
       FirebaseFirestore.instance
           .collection("users")
-          .doc(AuthService.user!.uid)
+          // .doc(AuthService.user?.uid)
+          .doc("NkPU5wChq7feuoEGgQujRGp1UQi1")
           .collection("history")
           .withConverter<HistoryModel>(
             fromFirestore: (snapshot, _) => HistoryModel.fromJson({
