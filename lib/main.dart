@@ -2,6 +2,7 @@ import 'package:camera/camera.dart';
 import 'package:escanio_app/pages/home_page.dart';
 import 'package:escanio_app/pages/login_page.dart';
 import 'package:escanio_app/pages/scanner_page.dart';
+import 'package:escanio_app/services/auth_service.dart';
 import 'package:escanio_app/services/firebase_service.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -27,15 +28,22 @@ class _AppState extends State<App> {
     await FirebaseService.init();
   }
 
+  Future initAuth() async {
+    await AuthService.init();
+  }
+
   Future initCameras() async {
-    cameras = await availableCameras();
+    try {
+      cameras = await availableCameras();
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   Future init() async {
-    await Future.wait([
-      initFirebase(),
-      initCameras(),
-    ]);
+    await initFirebase();
+    await initAuth();
+    await initCameras();
     setState(() {
       showSplash = false;
     });
@@ -89,10 +97,7 @@ class LoginState extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (context, snapshot) => snapshot.hasError ||
-                snapshot.connectionState == ConnectionState.active &&
-                    !snapshot.hasData
-            ? const LoginPage()
-            : const HomePage());
+        builder: (context, snapshot) =>
+            snapshot.hasError || snapshot.connectionState == ConnectionState.active && !snapshot.hasData ? const LoginPage() : const HomePage());
   }
 }

@@ -1,7 +1,12 @@
 import 'package:camera/camera.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:escanio_app/components/loading.dart';
 import 'package:escanio_app/components/scanned_card.dart';
+import 'package:escanio_app/extensions/iterable_extension.dart';
+import 'package:escanio_app/models/history_model.dart';
+import 'package:escanio_app/models/price_model.dart';
 import 'package:escanio_app/models/product_model.dart';
+import 'package:escanio_app/services/history_service.dart';
 import 'package:escanio_app/services/product_service.dart';
 import 'package:flutter/material.dart';
 import 'package:escanio_app/main.dart';
@@ -16,10 +21,12 @@ class ScannerPage extends StatefulWidget {
 
 class _ScannerPageState extends State<ScannerPage> {
   final _scanned = <ProductModel>[];
+  final _blockList = <String>[];
 
   final _barcodeScanner = BarcodeScanner();
   bool _canProcess = true;
   bool _isBusy = false;
+  bool _isStreaming = false;
 
   CameraController? _cameraController;
   CameraDescription? camera;
@@ -38,41 +45,15 @@ class _ScannerPageState extends State<ScannerPage> {
     super.dispose();
   }
 
-  Future<void> _processImage(InputImage inputImage) async {
-    if (!_canProcess || _isBusy) return;
-    setState(() {
-      _isBusy = true;
-    });
-    final barcodes = await _barcodeScanner.processImage(inputImage);
-
-    for (final barcode in barcodes) {
-      if (_scanned.any((element) => element.barCode == barcode.rawValue!)) {
-        continue;
-      }
-      var snapshot = await ProductsService.scan(barcode.rawValue!);
-      var products = snapshot.docs.map((e) => e.data()).toList();
-      _scanned.addAll(products);
-    }
-
-    if (mounted) {
-      setState(() {
-        _isBusy = false;
-      });
-    }
-  }
-
   InputImage? _inputImageFromCameraImage(CameraImage image) {
-    final rotation =
-        InputImageRotationValue.fromRawValue(camera!.sensorOrientation);
+    final rotation = InputImageRotationValue.fromRawValue(camera!.sensorOrientation);
 
     if (rotation == null) {
       return null;
     }
 
     final format = InputImageFormatValue.fromRawValue(image.format.raw);
-    if (format == null ||
-        format != InputImageFormat.nv21 ||
-        image.planes.length != 1) {
+    if (format == null || format != InputImageFormat.nv21 || image.planes.length != 1) {
       return null;
     }
 
@@ -94,7 +75,7 @@ class _ScannerPageState extends State<ScannerPage> {
   void _processCameraImage(CameraImage image) {
     final inputImage = _inputImageFromCameraImage(image);
     if (inputImage == null) return;
-    _processImage(inputImage);
+    _processBarCode(inputImage);
   }
 
   Future<void> _startLiveFeed() async {
@@ -105,9 +86,93 @@ class _ScannerPageState extends State<ScannerPage> {
       imageFormatGroup: ImageFormatGroup.nv21,
     );
     await _cameraController?.initialize();
+    _resumeLiveFeed();
+  }
+
+  Future<void> _pauseLiveFeed() async {
+    _cameraController?.stopImageStream();
+    if (mounted) {
+      setState(() {
+        _isStreaming = true;
+      });
+    }
+  }
+
+  Future<void> _resumeLiveFeed() async {
     _cameraController?.startImageStream(_processCameraImage);
     if (mounted) {
-      setState(() {});
+      setState(() {
+        _isStreaming = true;
+      });
+    }
+  }
+
+  Future<void> _addToHistory(ProductModel product) async {
+    var ref = HistoryService.collection.doc(product.id);
+    var snapshot = await ref.get();
+    HistoryModel history;
+
+    // Updates History
+    if (snapshot.exists) {
+      history = snapshot.data()!;
+
+      var lastPrice = product.prices.first.value;
+
+      if (lastPrice != history.price) {
+        product.prices.insert(0, PriceModel(date: Timestamp.now(), value: lastPrice));
+        ProductsService.set(product);
+        history.price = lastPrice;
+      }
+    }
+
+    // Create new History
+    else {
+      history = HistoryModel(
+        id: product.id,
+        name: product.name,
+        price: product.prices.first.value,
+        lastSeen: Timestamp.now(),
+        isFavourite: false,
+      );
+    }
+
+    await ref.set(history);
+  }
+
+  Future<void> _processBarCode(InputImage inputImage) async {
+    if (!_canProcess || _isBusy) return;
+    await _cameraController!.pausePreview();
+    setState(() {
+      _isBusy = true;
+    });
+    final barcodes = await _barcodeScanner.processImage(inputImage);
+
+    for (final barcode in barcodes) {
+      var code = barcode.rawValue!;
+
+      if (_blockList.contains(code)) {
+        continue;
+      }
+      if (_scanned.any((element) => element.barCode == code)) {
+        continue;
+      }
+      var snapshot = await ProductsService.scan(code);
+      var products = snapshot.docs.map((e) => e.data()).toList();
+      if (products.isEmpty) {
+        _blockList.add(code);
+      }
+
+      for (final product in products) {
+        await _addToHistory(product);
+        _scanned.add(product);
+      }
+    }
+
+    if (mounted) {
+      await _cameraController!.resumePreview();
+      setState(() {
+        _isBusy = false;
+      });
     }
   }
 
@@ -123,13 +188,15 @@ class _ScannerPageState extends State<ScannerPage> {
       body: SafeArea(
         child: Column(
           children: [
-            AspectRatio(
-              aspectRatio: 1 / previewRatio,
-              child: ClipRect(
-                child: Transform.scale(
-                  scale: _cameraController!.value.aspectRatio / previewRatio,
-                  child: Center(
-                    child: CameraPreview(_cameraController!),
+            GestureDetector(
+              child: AspectRatio(
+                aspectRatio: 1 / previewRatio,
+                child: ClipRect(
+                  child: Transform.scale(
+                    scale: _cameraController!.value.aspectRatio / previewRatio,
+                    child: Center(
+                      child: CameraPreview(_cameraController!),
+                    ),
                   ),
                 ),
               ),
@@ -141,6 +208,8 @@ class _ScannerPageState extends State<ScannerPage> {
                 itemBuilder: (context, index) {
                   return ScannedCard(
                     product: _scanned.elementAt(index),
+                    onDismiss: _resumeLiveFeed,
+                    onShow: _pauseLiveFeed,
                   );
                 },
               ),

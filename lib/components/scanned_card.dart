@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class ScannedCard extends StatelessWidget {
+  final void Function()? onDismiss;
+  final void Function()? onShow;
   final ProductModel product;
-  const ScannedCard({super.key, required this.product});
+  const ScannedCard({super.key, required this.product, required this.onDismiss, required this.onShow});
 
   @override
   Widget build(BuildContext context) {
@@ -18,17 +20,18 @@ class ScannedCard extends StatelessWidget {
         ),
         child: InkWell(
           borderRadius: const BorderRadius.all(Radius.circular(16)),
-          onTap: () => showModalBottomSheet(
-            isScrollControlled: true,
-            context: context,
-            backgroundColor: Colors.transparent,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(16), topRight: Radius.circular(16)),
-            ),
-            builder: (context) =>
-                PricesModal(context: context, productId: product.id),
-          ),
+          onTap: () {
+            onShow?.call();
+            showModalBottomSheet(
+              isScrollControlled: true,
+              context: context,
+              backgroundColor: Colors.transparent,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
+              ),
+              builder: (context) => PricesModal(context: context, productId: product.id),
+            ).then((dynamic) => onDismiss?.call());
+          },
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             child: Wrap(

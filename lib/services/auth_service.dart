@@ -5,6 +5,10 @@ class AuthService {
   static User? get user => FirebaseAuth.instance.currentUser;
   static FirebaseAuth get _auth => FirebaseAuth.instance;
 
+  static Future init() async {
+    await _auth.authStateChanges().first;
+  }
+
   static Future signInGoogle() async {
     var googleUser = await GoogleSignIn().signIn();
     var googleAuth = await googleUser?.authentication;

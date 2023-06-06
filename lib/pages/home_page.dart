@@ -8,17 +8,6 @@ import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
-  final title = 'Eba';
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
   @override
   State<HomePage> createState() => _HomePageState();
 }
@@ -75,8 +64,7 @@ class _HomePageState extends State<HomePage> {
               children: [
                 HistoryPage(history: history),
                 FavoritesPage(
-                  favourites:
-                      history.where((element) => element.isFavourite).toList(),
+                  favourites: history.where((element) => element.isFavourite).toList(),
                 ),
                 UserPage(history: history),
               ],
@@ -107,19 +95,15 @@ class NavigationBar extends StatelessWidget {
         onTap: onTap,
         items: [
           BottomNavigationBarItem(
-            icon: Icon(
-                currentIndex == 0 ? Icons.home_rounded : Icons.home_outlined),
+            icon: Icon(currentIndex == 0 ? Icons.home_rounded : Icons.home_outlined),
             label: "Home",
           ),
           BottomNavigationBarItem(
-            icon: Icon(
-                currentIndex == 1 ? Icons.favorite : Icons.favorite_border),
+            icon: Icon(currentIndex == 1 ? Icons.favorite : Icons.favorite_border),
             label: "Favoritos",
           ),
           BottomNavigationBarItem(
-            icon: Icon(currentIndex == 2
-                ? Icons.person_rounded
-                : Icons.person_outline_rounded),
+            icon: Icon(currentIndex == 2 ? Icons.person_rounded : Icons.person_outline_rounded),
             label: "Conta",
           ),
         ]);
