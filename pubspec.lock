@@ -37,34 +37,34 @@ packages:
     dependency: transitive
     description:
       name: camera_android
-      sha256: "61bbae4af0204b9bbfd82182e313d405abf5a01bdb057ff6675f2269a5cab4fd"
+      sha256: f83e406d34f5faa80bf0f5c3beee4b4c11da94a94e9621c1bb8e312988621b4b
       url: "https://pub.dev"
     source: hosted
-    version: "0.10.8+1"
+    version: "0.10.8+2"
   camera_avfoundation:
     dependency: transitive
     description:
       name: camera_avfoundation
-      sha256: "7ac8b950672716722af235eed7a7c37896853669800b7da706bb0a9fd41d3737"
+      sha256: "1a416e452b30955b392f4efbf23291d3f2ba3660a85e1628859eb62d2a2bab26"
       url: "https://pub.dev"
     source: hosted
-    version: "0.9.13+1"
+    version: "0.9.13+2"
   camera_platform_interface:
     dependency: transitive
     description:
       name: camera_platform_interface
-      sha256: "525017018d116c5db8c4c43ec2d9b1663216b369c9f75149158280168a7ce472"
+      sha256: "60fa0bb62a4f3bf3a7c413e31e4cd01b69c779ccc8e4668904a24581b86c316b"
       url: "https://pub.dev"
     source: hosted
-    version: "2.5.0"
+    version: "2.5.1"
   camera_web:
     dependency: transitive
     description:
       name: camera_web
-      sha256: d77965f32479ee6d8f48205dcf10f845d7210595c6c00faa51eab265d1cae993
+      sha256: bcbd775fb3a9d51cc3ece899d54ad66f6306410556bac5759f78e13f9228841f
       url: "https://pub.dev"
     source: hosted
-    version: "0.3.1+3"
+    version: "0.3.1+4"
   characters:
     dependency: transitive
     description:
@@ -224,16 +224,8 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.2.1"
-  google_ml_kit:
-    dependency: "direct main"
-    description:
-      name: google_ml_kit
-      sha256: c309d247d8bd1f128be041e0428af233e56a7ab0733325e0b644edfa53c80e3d
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.15.0"
   google_mlkit_barcode_scanning:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: google_mlkit_barcode_scanning
       sha256: "60171e66d05a57f19d4a4e4422bbd8d448569db9ab59f3c5e13bbea2492598c7"
@@ -248,94 +240,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.4.0"
-  google_mlkit_digital_ink_recognition:
-    dependency: transitive
-    description:
-      name: google_mlkit_digital_ink_recognition
-      sha256: cca35fb771284fc8b5ac78af86b665ac55a78f39a4868637c17d759adfd32848
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.8.0"
-  google_mlkit_entity_extraction:
-    dependency: transitive
-    description:
-      name: google_mlkit_entity_extraction
-      sha256: "4fcd25c87d97c30a9b379a14fc9f1c041da650f8ad5984f4f3045404a10d3041"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.8.0"
-  google_mlkit_face_detection:
-    dependency: transitive
-    description:
-      name: google_mlkit_face_detection
-      sha256: "61889535a9c63a8e6322e25969f75a4a950a56103bdd477f1a5817d6f06553b9"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.7.0"
-  google_mlkit_image_labeling:
-    dependency: transitive
-    description:
-      name: google_mlkit_image_labeling
-      sha256: "72b93362d6c94c945436d0d435bf058ebc591128ffce871f7de4e460e43cf07b"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.7.0"
-  google_mlkit_language_id:
-    dependency: transitive
-    description:
-      name: google_mlkit_language_id
-      sha256: "356626b8a013e2a115ec477b291aa585da1b21d16d9199218e9ddfec1e1b25bc"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.7.0"
-  google_mlkit_object_detection:
-    dependency: transitive
-    description:
-      name: google_mlkit_object_detection
-      sha256: "550c5ffb9a3ca5b460593d47fcc31648e49057becb5899bef4e0ff737524021e"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.8.0"
-  google_mlkit_pose_detection:
-    dependency: transitive
-    description:
-      name: google_mlkit_pose_detection
-      sha256: "8775e8b940ae4ff3fa10d3f52bfed534f9a0e36d462efbac27ef360c0081cc3d"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.7.0"
-  google_mlkit_selfie_segmentation:
-    dependency: transitive
-    description:
-      name: google_mlkit_selfie_segmentation
-      sha256: ba956596e98559a07d53b0afdc460fa4f680e6577f6378ed97e9f9a52920449e
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.4.0"
-  google_mlkit_smart_reply:
-    dependency: transitive
-    description:
-      name: google_mlkit_smart_reply
-      sha256: "38c9c76b07c9805b3ebbceec5802ef6c51fd52063167042788cdfdd0d42e9ade"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.7.0"
-  google_mlkit_text_recognition:
-    dependency: transitive
-    description:
-      name: google_mlkit_text_recognition
-      sha256: a3d30e8ba87c88fb9b7c3b7d81d524153ea32497ac37be490f4992f2902dbabb
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.7.0"
-  google_mlkit_translation:
-    dependency: transitive
-    description:
-      name: google_mlkit_translation
-      sha256: e3e76b21f04714cbc38d158f0d0b2aef48c50e1e012ada2367e0ffe0ebf16f91
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.7.0"
   google_sign_in:
     dependency: "direct main"
     description:

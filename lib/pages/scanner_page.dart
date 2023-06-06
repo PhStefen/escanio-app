@@ -1,11 +1,11 @@
 import 'package:camera/camera.dart';
 import 'package:escanio_app/components/loading.dart';
-import 'package:escanio_app/extensions/iterable_extension.dart';
+import 'package:escanio_app/components/scanned_card.dart';
 import 'package:escanio_app/models/product_model.dart';
 import 'package:escanio_app/services/product_service.dart';
 import 'package:flutter/material.dart';
-import 'package:google_ml_kit/google_ml_kit.dart';
 import 'package:escanio_app/main.dart';
+import 'package:google_mlkit_barcode_scanning/google_mlkit_barcode_scanning.dart';
 
 class ScannerPage extends StatefulWidget {
   const ScannerPage({super.key});
@@ -49,11 +49,8 @@ class _ScannerPageState extends State<ScannerPage> {
       if (_scanned.any((element) => element.barCode == barcode.rawValue!)) {
         continue;
       }
-      print(_scanned);
       var snapshot = await ProductsService.scan(barcode.rawValue!);
       var products = snapshot.docs.map((e) => e.data()).toList();
-      print(products);
-      print(barcode.rawValue!);
       _scanned.addAll(products);
     }
 
@@ -101,7 +98,6 @@ class _ScannerPageState extends State<ScannerPage> {
   }
 
   Future<void> _startLiveFeed() async {
-
     _cameraController = CameraController(
       camera!,
       ResolutionPreset.high,
@@ -143,7 +139,9 @@ class _ScannerPageState extends State<ScannerPage> {
                 reverse: true,
                 itemCount: _scanned.length,
                 itemBuilder: (context, index) {
-                  return Text(_scanned.elementAtOrNull(index)?.name ?? "eba");
+                  return ScannedCard(
+                    product: _scanned.elementAt(index),
+                  );
                 },
               ),
             ),
