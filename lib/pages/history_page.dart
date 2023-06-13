@@ -78,9 +78,7 @@ class _HistoryPageState extends State<HistoryPage> {
                 var isFirstItem = index == 0;
 
                 if (isFirstItem ||
-                    (nextHistory != null &&
-                        !DateUtils.isSameDay(currentHistory.lastSeen.toDate(),
-                            currentHistory.lastSeen.toDate()))) {
+                    (nextHistory != null && !DateUtils.isSameDay(currentHistory.lastSeen.toDate(), currentHistory.lastSeen.toDate()))) {
                   children = [
                     const SizedBox(height: 12),
                     Text(
@@ -90,16 +88,13 @@ class _HistoryPageState extends State<HistoryPage> {
                             locale: "pt_BR",
                           )
                           .toCamelCase(),
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 12),
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
                     ),
                     ...children
                   ];
                 }
 
-                return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: children);
+                return Column(crossAxisAlignment: CrossAxisAlignment.start, children: children);
               },
             ),
           ),

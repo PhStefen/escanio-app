@@ -10,6 +10,7 @@ import 'package:escanio_app/services/history_service.dart';
 import 'package:escanio_app/services/product_service.dart';
 import 'package:flutter/material.dart';
 import 'package:escanio_app/main.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_mlkit_barcode_scanning/google_mlkit_barcode_scanning.dart';
 
 class ScannerPage extends StatefulWidget {
@@ -115,26 +116,29 @@ class _ScannerPageState extends State<ScannerPage> {
     // Updates History
     if (snapshot.exists) {
       history = snapshot.data()!;
+      history.lastSeen = Timestamp.now();
 
       var lastPrice = product.prices.first.value;
+      Map<String, dynamic> updateValues = {"lastSeen": Timestamp.now()};
 
       if (lastPrice != history.price) {
         product.prices.insert(0, PriceModel(date: Timestamp.now(), value: lastPrice));
-        ProductsService.set(product);
-        history.price = lastPrice;
+        ProductsService.collection.doc(product.id).update({"prices": product.prices});
+        updateValues["price"] = lastPrice;
       }
+
+      await ref.update(updateValues);
+      return;
     }
 
     // Create new History
-    else {
-      history = HistoryModel(
-        id: product.id,
-        name: product.name,
-        price: product.prices.first.value,
-        lastSeen: Timestamp.now(),
-        isFavourite: false,
-      );
-    }
+    history = HistoryModel(
+      id: product.id,
+      name: product.name,
+      price: product.prices.first.value,
+      lastSeen: Timestamp.now(),
+      isFavourite: false,
+    );
 
     await ref.set(history);
   }
@@ -142,9 +146,11 @@ class _ScannerPageState extends State<ScannerPage> {
   Future<void> _processBarCode(InputImage inputImage) async {
     if (!_canProcess || _isBusy) return;
     await _cameraController!.pausePreview();
-    setState(() {
-      _isBusy = true;
-    });
+    if (mounted) {
+      setState(() {
+        _isBusy = true;
+      });
+    }
     final barcodes = await _barcodeScanner.processImage(inputImage);
 
     for (final barcode in barcodes) {
@@ -164,12 +170,12 @@ class _ScannerPageState extends State<ScannerPage> {
 
       for (final product in products) {
         await _addToHistory(product);
-        _scanned.add(product);
+        _scanned.insert(0, product);
       }
     }
 
+    await _cameraController!.resumePreview();
     if (mounted) {
-      await _cameraController!.resumePreview();
       setState(() {
         _isBusy = false;
       });
@@ -182,36 +188,53 @@ class _ScannerPageState extends State<ScannerPage> {
       return const Loading();
     }
 
-    const previewRatio = 0.8;
+    const previewRatio = .7;
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.primary,
+      appBar: AppBar(),
       body: SafeArea(
         child: Column(
           children: [
-            GestureDetector(
-              child: AspectRatio(
-                aspectRatio: 1 / previewRatio,
-                child: ClipRect(
-                  child: Transform.scale(
-                    scale: _cameraController!.value.aspectRatio / previewRatio,
-                    child: Center(
-                      child: CameraPreview(_cameraController!),
+            Stack(
+              children: [
+                AspectRatio(
+                  aspectRatio: 1 / previewRatio,
+                  child: ClipRect(
+                    child: Transform.scale(
+                      scale: _cameraController!.value.aspectRatio / previewRatio,
+                      child: Center(
+                        child: CameraPreview(_cameraController!),
+                      ),
                     ),
                   ),
                 ),
-              ),
+                Positioned.fill(
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Padding(
+                      padding: const EdgeInsets.all(24),
+                      child: SvgPicture.asset(
+                        "images/scanner_layout.svg",
+                        colorFilter: ColorFilter.mode(Theme.of(context).colorScheme.primary, BlendMode.srcIn),
+                        width: double.infinity,
+                      ),
+                    ),
+                  ),
+                )
+              ],
             ),
             Expanded(
-              child: ListView.builder(
-                reverse: true,
-                itemCount: _scanned.length,
-                itemBuilder: (context, index) {
-                  return ScannedCard(
-                    product: _scanned.elementAt(index),
-                    onDismiss: _resumeLiveFeed,
-                    onShow: _pauseLiveFeed,
-                  );
-                },
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: ListView.builder(
+                  itemCount: _scanned.length,
+                  itemBuilder: (context, index) {
+                    return ScannedCard(
+                      product: _scanned.elementAt(index),
+                      onDismiss: _resumeLiveFeed,
+                      onShow: _pauseLiveFeed,
+                    );
+                  },
+                ),
               ),
             ),
           ],

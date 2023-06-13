@@ -43,6 +43,7 @@ dependencies:
   timeago: ^3.4.0
   camera: ^0.10.5+2
   google_mlkit_barcode_scanning: ^0.7.0
+  flutter_svg: ^2.0.5
 
 dev_dependencies:
   flutter_test:
@@ -72,6 +73,9 @@ flutter:
     - images/anonymous32.png
     - images/anonymous512.png
     - images/google_PNG19635.png
+    - images/logo_escuro.svg
+    - images/logo_claro.svg
+    - images/scanner_layout.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

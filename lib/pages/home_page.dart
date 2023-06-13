@@ -67,19 +67,18 @@ class _HomePageState extends State<HomePage> {
               children: [
                 HistoryPage(history: history),
                 FavoritesPage(
-                  favourites:
-                      history.where((element) => element.isFavourite).toList(),
+                  favourites: history.where((element) => element.isFavourite).toList(),
                 ),
                 UserPage(
-                    history: history,
-                    onBack: () {
-                      print(previousIndex);
-                      pageController.animateToPage(
-                        previousIndex,
-                        duration: const Duration(microseconds: 300),
-                        curve: Curves.easeInOut,
-                      );
-                    }),
+                  history: history,
+                  onBack: () {
+                    pageController.animateToPage(
+                      previousIndex,
+                      duration: const Duration(microseconds: 300),
+                      curve: Curves.easeInOut,
+                    );
+                  },
+                ),
               ],
             );
           },
@@ -102,27 +101,24 @@ class NavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        currentIndex: currentIndex,
-        selectedItemColor: Colors.white,
-        onTap: onTap,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(
-                currentIndex == 0 ? Icons.home_rounded : Icons.home_outlined),
-            label: "Home",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-                currentIndex == 1 ? Icons.favorite : Icons.favorite_border),
-            label: "Favoritos",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(currentIndex == 2
-                ? Icons.person_rounded
-                : Icons.person_outline_rounded),
-            label: "Conta",
-          ),
-        ]);
+      backgroundColor: Theme.of(context).colorScheme.primary,
+      currentIndex: currentIndex,
+      selectedItemColor: Colors.white,
+      onTap: onTap,
+      items: [
+        BottomNavigationBarItem(
+          icon: Icon(currentIndex == 0 ? Icons.home_rounded : Icons.home_outlined),
+          label: "Home",
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(currentIndex == 1 ? Icons.favorite : Icons.favorite_border),
+          label: "Favoritos",
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(currentIndex == 2 ? Icons.person_rounded : Icons.person_outline_rounded),
+          label: "Conta",
+        ),
+      ],
+    );
   }
 }

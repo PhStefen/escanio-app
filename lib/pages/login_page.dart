@@ -3,6 +3,7 @@ import 'package:escanio_app/components/loading.dart';
 import 'package:escanio_app/services/auth_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -18,14 +19,9 @@ class _LoginPageState extends State<LoginPage> {
     setState(() {
       loading = true;
     });
-    await (googleSignIn
-        ? AuthService.signInGoogle()
-        : AuthService.signInAnonymously());
+    await (googleSignIn ? AuthService.signInGoogle() : AuthService.signInAnonymously());
 
-    FirebaseFirestore.instance
-        .collection("users")
-        .doc(AuthService.user!.uid)
-        .set({});
+    FirebaseFirestore.instance.collection("users").doc(AuthService.user!.uid).set({});
   }
 
   @override
@@ -42,8 +38,8 @@ class _LoginPageState extends State<LoginPage> {
                   children: [
                     Column(
                       children: [
-                        Image.asset(
-                          'images/LogoScanner.png',
+                        SvgPicture.asset(
+                          "images/logo_escuro.svg",
                           height: 300,
                         ),
                         const SizedBox(height: 100),
@@ -57,15 +53,13 @@ class _LoginPageState extends State<LoginPage> {
                           margin: const EdgeInsets.symmetric(horizontal: 20),
                           child: ElevatedButton(
                             style: ButtonStyle(
-                              shape: MaterialStateProperty.all<
-                                  RoundedRectangleBorder>(
+                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                                 RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
                                   // side: BorderSide(color: Colors.white),
                                 ),
                               ),
-                              backgroundColor: MaterialStateProperty.all(
-                                  Theme.of(context).cardColor == const Color(0xffffffff)
+                              backgroundColor: MaterialStateProperty.all(Theme.of(context).cardColor == const Color(0xffffffff)
                                   ? Theme.of(context).colorScheme.primary
                                   : Theme.of(context).cardColor),
                             ),
@@ -92,8 +86,7 @@ class _LoginPageState extends State<LoginPage> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
+                                        mainAxisAlignment: MainAxisAlignment.start,
                                         children: const [
                                           SizedBox(width: 5),
                                           Text(
@@ -122,17 +115,15 @@ class _LoginPageState extends State<LoginPage> {
                             margin: const EdgeInsets.symmetric(horizontal: 20),
                             child: ElevatedButton(
                               style: ButtonStyle(
-                                shape: MaterialStateProperty.all<
-                                    RoundedRectangleBorder>(
+                                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10),
                                     // side: BorderSide(color: Colors.white),
                                   ),
                                 ),
-                                backgroundColor: MaterialStateProperty.all(
-                                    Theme.of(context).cardColor == const Color(0xffffffff)
-                                  ? Theme.of(context).colorScheme.primary
-                                  : Theme.of(context).cardColor),
+                                backgroundColor: MaterialStateProperty.all(Theme.of(context).cardColor == const Color(0xffffffff)
+                                    ? Theme.of(context).colorScheme.primary
+                                    : Theme.of(context).cardColor),
                               ),
                               onPressed: () => signIn(true),
                               child: SizedBox(
@@ -154,12 +145,10 @@ class _LoginPageState extends State<LoginPage> {
                                       ),
                                     ),
                                     Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
                                         Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.start,
                                           children: const [
                                             SizedBox(width: 5),
                                             Text(
