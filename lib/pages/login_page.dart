@@ -21,7 +21,7 @@ class _LoginPageState extends State<LoginPage> {
     await (googleSignIn
         ? AuthService.signInGoogle()
         : AuthService.signInAnonymously());
-        
+
     FirebaseFirestore.instance
         .collection("users")
         .doc(AuthService.user!.uid)
@@ -51,32 +51,23 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     Column(
                       children: [
-                        //Botão do anônimo com o texto
-                        SizedBox(
-                          width: 364,
+                        //Novo Botão Login anônimo
+                        Container(
+                          width: double.infinity,
+                          margin: const EdgeInsets.symmetric(horizontal: 20),
                           child: ElevatedButton(
                             style: ButtonStyle(
                               shape: MaterialStateProperty.all<
                                   RoundedRectangleBorder>(
                                 RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(50),
+                                  borderRadius: BorderRadius.circular(10),
                                   // side: BorderSide(color: Colors.white),
                                 ),
                               ),
-                              backgroundColor:
-                                  MaterialStateProperty.resolveWith<Color>(
-                                (Set<MaterialState> states) {
-                                  if (states.contains(MaterialState.disabled)) {
-                                    return Colors
-                                        .grey; // Define a cor do botão desabilitado como cinza
-                                  }
-                                  return Theme.of(context)
-                                      .colorScheme
-                                      .primary; // Define a cor do botão habilitado como verde
-                                },
-                              ),
-                              foregroundColor: MaterialStateProperty.all<Color>(
-                                  Colors.white),
+                              backgroundColor: MaterialStateProperty.all(
+                                  Theme.of(context).cardColor == const Color(0xffffffff)
+                                  ? Theme.of(context).colorScheme.primary
+                                  : Theme.of(context).cardColor),
                             ),
                             onPressed: () => signIn(false),
                             child: SizedBox(
@@ -84,7 +75,7 @@ class _LoginPageState extends State<LoginPage> {
                               child: Stack(
                                 children: [
                                   Positioned(
-                                    left: 0,
+                                    right: 0,
                                     child: Container(
                                       height: 50,
                                       width: 50,
@@ -102,11 +93,15 @@ class _LoginPageState extends State<LoginPage> {
                                     children: [
                                       Row(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                            MainAxisAlignment.start,
                                         children: const [
+                                          SizedBox(width: 5),
                                           Text(
                                             "Continuar como anônimo",
-                                            style: TextStyle(fontSize: 20),
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.white,
+                                            ),
                                           ),
                                         ],
                                       ),
@@ -120,43 +115,32 @@ class _LoginPageState extends State<LoginPage> {
 
                         const SizedBox(height: 20),
 
-                        //Botão do google com o texto
+                        //Novo Botão Login google
                         if (!kIsWeb)
-                          SizedBox(
-                            width: 364,
+                          Container(
+                            width: double.infinity,
+                            margin: const EdgeInsets.symmetric(horizontal: 20),
                             child: ElevatedButton(
                               style: ButtonStyle(
                                 shape: MaterialStateProperty.all<
                                     RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(50),
+                                    borderRadius: BorderRadius.circular(10),
+                                    // side: BorderSide(color: Colors.white),
                                   ),
                                 ),
-                                backgroundColor:
-                                    MaterialStateProperty.resolveWith<Color>(
-                                  (Set<MaterialState> states) {
-                                    if (states
-                                        .contains(MaterialState.disabled)) {
-                                      return Colors
-                                          .grey; // Define a cor do botão desabilitado como cinza
-                                    }
-                                    return Theme.of(context)
-                                        .colorScheme
-                                        .primary; // Define a cor do botão habilitado como verde
-                                  },
-                                ),
-                                foregroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        Colors.white),
+                                backgroundColor: MaterialStateProperty.all(
+                                    Theme.of(context).cardColor == const Color(0xffffffff)
+                                  ? Theme.of(context).colorScheme.primary
+                                  : Theme.of(context).cardColor),
                               ),
-                              // onPressed: null,
                               onPressed: () => signIn(true),
                               child: SizedBox(
                                 height: 50,
                                 child: Stack(
                                   children: [
                                     Positioned(
-                                      left: 0,
+                                      right: 0,
                                       child: Container(
                                         height: 50,
                                         width: 50,
@@ -175,11 +159,15 @@ class _LoginPageState extends State<LoginPage> {
                                       children: [
                                         Row(
                                           mainAxisAlignment:
-                                              MainAxisAlignment.center,
+                                              MainAxisAlignment.start,
                                           children: const [
+                                            SizedBox(width: 5),
                                             Text(
                                               "Continuar como Google",
-                                              style: TextStyle(fontSize: 20),
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.white,
+                                              ),
                                             ),
                                           ],
                                         ),
@@ -192,11 +180,6 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                       ],
                     ),
-
-                    // const ElevatedButton(
-                    //   onPressed: FirebaseService.signIn,
-                    //   child: Text("Continuar com o Google"),
-                    // ),
                   ],
                 ),
         ),
@@ -204,5 +187,3 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 }
-
-

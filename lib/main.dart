@@ -62,6 +62,7 @@ class _AppState extends State<App> {
       title: "Escânio",
       theme: ThemeData.light().copyWith(
         colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.red),
+        // cardColor: Colors.grey
       ),
       darkTheme: ThemeData.dark().copyWith(
         colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.red),
@@ -97,7 +98,10 @@ class LoginState extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (context, snapshot) =>
-            snapshot.hasError || snapshot.connectionState == ConnectionState.active && !snapshot.hasData ? const LoginPage() : const HomePage());
+        builder: (context, snapshot) => snapshot.hasError ||
+                snapshot.connectionState == ConnectionState.active &&
+                    !snapshot.hasData
+            ? const LoginPage()
+            : const HomePage());
   }
 }

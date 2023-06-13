@@ -1,13 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:escanio_app/models/history_model.dart';
 import 'package:escanio_app/services/auth_service.dart';
-import 'package:escanio_app/services/firebase_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class UserPage extends StatefulWidget {
   final List<HistoryModel> history;
-  const UserPage({super.key, required this.history});
+  final void Function() onBack;
+  const UserPage({super.key, required this.history, required this.onBack});
 
   @override
   State<UserPage> createState() => _UserPageState();
@@ -97,57 +97,60 @@ class _UserPageState extends State<UserPage> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               //Botão Favorito
-              Container(
-                width: double.infinity,
-                margin: const EdgeInsets.symmetric(horizontal: 20),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primary,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: SizedBox(
-                  height: 50,
-                  child: Stack(
-                    children: [
-                      Positioned(
-                        right: 0,
-                        child: Row(
-                          children: [
-                            Text(
-                              widget.history
-                                  .where((h) => h.isFavourite)
-                                  .length
-                                  .toString(),
-                            ),
-                            const SizedBox(
-                              height: 50,
-                              width: 50,
-                              child: Icon(
-                                Icons.favorite_outlined,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: const [
-                              SizedBox(width: 20),
+              GestureDetector(
+                onTap: widget.onBack,
+                child: Container(
+                  width: double.infinity,
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.primary,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: SizedBox(
+                    height: 50,
+                    child: Stack(
+                      children: [
+                        Positioned(
+                          right: 0,
+                          child: Row(
+                            children: [
                               Text(
-                                "Favoritos",
-                                style: TextStyle(
-                                  fontSize: 16,
+                                widget.history
+                                    .where((h) => h.isFavourite)
+                                    .length
+                                    .toString(),
+                              ),
+                              const SizedBox(
+                                height: 50,
+                                width: 50,
+                                child: Icon(
+                                  Icons.favorite_outlined,
                                   color: Colors.white,
                                 ),
                               ),
                             ],
                           ),
-                        ],
-                      ),
-                    ],
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: const [
+                                SizedBox(width: 20),
+                                Text(
+                                  "Favoritos",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -220,7 +223,9 @@ class _UserPageState extends State<UserPage> {
                             ),
                           ),
                           backgroundColor: MaterialStateProperty.all(
-                              Theme.of(context).cardColor),
+                              Theme.of(context).cardColor == const Color(0xffffffff)
+                                  ? Theme.of(context).colorScheme.primary
+                                  : Theme.of(context).cardColor),
                         ),
                         onPressed: AuthService.signOut,
                         child: SizedBox(
