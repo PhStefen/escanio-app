@@ -47,21 +47,24 @@ class _HistoryPageState extends State<HistoryPage> {
                     const Icon(Icons.search_rounded),
                     const Padding(padding: EdgeInsets.only(left: 8)),
                     Expanded(
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).pushNamed("/scanner");
-                        },
-                        child: const TextField(
-                          enabled: false,
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintText: "Pesquise o nome ou código do produtos",
-                          ),
+                      child: TextField(
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                          hintText: "Pesquise o nome ou código do produtos",
                         ),
+                        onChanged: (value) {
+                          setState(() {
+                            pesquisa = value;
+                          });
+                        },
                       ),
                     ),
                     const Padding(padding: EdgeInsets.symmetric(horizontal: 8)),
-                    const Icon(Icons.qr_code_rounded),
+                    IconButton(
+                      icon: const Icon(Icons.qr_code_rounded),
+                      onPressed: () =>
+                          Navigator.of(context).pushNamed("/scanner"),
+                    ),
                     const Padding(padding: EdgeInsets.only(right: 8)),
                   ],
                 ),
@@ -78,7 +81,9 @@ class _HistoryPageState extends State<HistoryPage> {
                 var isFirstItem = index == 0;
 
                 if (isFirstItem ||
-                    (nextHistory != null && !DateUtils.isSameDay(currentHistory.lastSeen.toDate(), currentHistory.lastSeen.toDate()))) {
+                    (nextHistory != null &&
+                        !DateUtils.isSameDay(currentHistory.lastSeen.toDate(),
+                            currentHistory.lastSeen.toDate()))) {
                   children = [
                     const SizedBox(height: 12),
                     Text(
@@ -88,13 +93,16 @@ class _HistoryPageState extends State<HistoryPage> {
                             locale: "pt_BR",
                           )
                           .toCamelCase(),
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 12),
                     ),
                     ...children
                   ];
                 }
 
-                return Column(crossAxisAlignment: CrossAxisAlignment.start, children: children);
+                return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: children);
               },
             ),
           ),

@@ -36,6 +36,17 @@ class _UserPageState extends State<UserPage> {
             Column(
               children: [
                 Container(
+                  color: Theme.of(context).colorScheme.primary,
+                  padding: const EdgeInsetsDirectional.only(start: 10, top: 10),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: IconButton(
+                      icon: const Icon(Icons.arrow_back_rounded),
+                      onPressed: widget.onBack,
+                    ),
+                  ),
+                ),
+                Container(
                   height: 200,
                   width: double.infinity,
                   color: Theme.of(context).colorScheme.primary,
@@ -223,7 +234,8 @@ class _UserPageState extends State<UserPage> {
                             ),
                           ),
                           backgroundColor: MaterialStateProperty.all(
-                              Theme.of(context).cardColor == const Color(0xffffffff)
+                              Theme.of(context).cardColor ==
+                                      const Color(0xffffffff)
                                   ? Theme.of(context).colorScheme.primary
                                   : Theme.of(context).cardColor),
                         ),
