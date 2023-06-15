@@ -17,7 +17,7 @@ class _HomePageState extends State<HomePage> {
   final pageController = PageController(initialPage: 0);
   void onPageChanged(int index) {
     setState(() {
-      previousIndex = currentIndex;
+      // previousIndex = currentIndex;
       currentIndex = index;
     });
   }
@@ -25,9 +25,18 @@ class _HomePageState extends State<HomePage> {
   int previousIndex = 0;
   int currentIndex = 0;
   void onTap(int index) {
+    if (currentIndex == 0 && index == 2) {
+      setState(() {
+        previousIndex = 0;
+      });
+    } else {
+      setState(() {
+        previousIndex = 1;
+      });
+    }
     pageController.animateToPage(
       index,
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
     );
   }
@@ -67,14 +76,29 @@ class _HomePageState extends State<HomePage> {
               children: [
                 HistoryPage(history: history),
                 FavoritesPage(
-                  favourites: history.where((element) => element.isFavourite).toList(),
+                  favourites:
+                      history.where((element) => element.isFavourite).toList(),
                 ),
                 UserPage(
                   history: history,
                   onBack: () {
                     pageController.animateToPage(
                       previousIndex,
-                      duration: const Duration(microseconds: 300),
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+                    );
+                  },
+                  onFavourite: () {
+                    pageController.animateToPage(
+                      1,
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+                    );
+                  },
+                  onHistory: () {
+                    pageController.animateToPage(
+                      0,
+                      duration: const Duration(milliseconds: 300),
                       curve: Curves.easeInOut,
                     );
                   },
@@ -107,15 +131,19 @@ class NavigationBar extends StatelessWidget {
       onTap: onTap,
       items: [
         BottomNavigationBarItem(
-          icon: Icon(currentIndex == 0 ? Icons.home_rounded : Icons.home_outlined),
+          icon: Icon(
+              currentIndex == 0 ? Icons.home_rounded : Icons.home_outlined),
           label: "Home",
         ),
         BottomNavigationBarItem(
-          icon: Icon(currentIndex == 1 ? Icons.favorite : Icons.favorite_border),
+          icon:
+              Icon(currentIndex == 1 ? Icons.favorite : Icons.favorite_border),
           label: "Favoritos",
         ),
         BottomNavigationBarItem(
-          icon: Icon(currentIndex == 2 ? Icons.person_rounded : Icons.person_outline_rounded),
+          icon: Icon(currentIndex == 2
+              ? Icons.person_rounded
+              : Icons.person_outline_rounded),
           label: "Conta",
         ),
       ],

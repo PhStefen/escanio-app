@@ -7,7 +7,14 @@ import 'package:flutter/material.dart';
 class UserPage extends StatefulWidget {
   final List<HistoryModel> history;
   final void Function() onBack;
-  const UserPage({super.key, required this.history, required this.onBack});
+  final void Function() onFavourite;
+  final void Function() onHistory;
+  const UserPage(
+      {super.key,
+      required this.history,
+      required this.onBack,
+      required this.onFavourite,
+      required this.onHistory});
 
   @override
   State<UserPage> createState() => _UserPageState();
@@ -109,7 +116,7 @@ class _UserPageState extends State<UserPage> {
             children: [
               //Botão Favorito
               GestureDetector(
-                onTap: widget.onBack,
+                onTap: widget.onFavourite,
                 child: Container(
                   width: double.infinity,
                   margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -169,49 +176,52 @@ class _UserPageState extends State<UserPage> {
               const SizedBox(height: 12),
 
               //Botão Histórico
-              Container(
-                width: double.infinity,
-                margin: const EdgeInsets.symmetric(horizontal: 20),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primary,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: SizedBox(
-                  height: 50,
-                  child: Stack(
-                    children: [
-                      Positioned(
-                        right: 0,
-                        child: Row(
-                          children: [
-                            Text(widget.history.length.toString()),
-                            const SizedBox(
-                              height: 50,
-                              width: 50,
-                              child: Icon(Icons.history, color: Colors.white),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: const [
-                              SizedBox(width: 20),
-                              Text(
-                                "Histórico",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.white,
-                                ),
+              GestureDetector(
+                onTap: widget.onHistory,
+                child: Container(
+                  width: double.infinity,
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.primary,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: SizedBox(
+                    height: 50,
+                    child: Stack(
+                      children: [
+                        Positioned(
+                          right: 0,
+                          child: Row(
+                            children: [
+                              Text(widget.history.length.toString()),
+                              const SizedBox(
+                                height: 50,
+                                width: 50,
+                                child: Icon(Icons.history, color: Colors.white),
                               ),
                             ],
                           ),
-                        ],
-                      ),
-                    ],
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: const [
+                                SizedBox(width: 20),
+                                Text(
+                                  "Histórico",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
