@@ -72,39 +72,54 @@ class _HistoryPageState extends State<HistoryPage> {
             ),
           ),
           Expanded(
-            child: ListView.builder(
-              itemCount: widget.history.length,
-              itemBuilder: (context, index) {
-                var currentHistory = widget.history[index];
-                var nextHistory = widget.history.elementAtOrNull(index + 1);
-                var children = <Widget>[ProductCard(history: currentHistory)];
-                var isFirstItem = index == 0;
+            child: pesquisa.isEmpty
+                ? ListView.builder(
+                    itemCount: widget.history.length,
+                    itemBuilder: (context, index) {
+                      var currentHistory = widget.history[index];
+                      var nextHistory =
+                          widget.history.elementAtOrNull(index + 1);
+                      var children = <Widget>[
+                        ProductCard(history: currentHistory)
+                      ];
+                      var isFirstItem = index == 0;
 
-                if (isFirstItem ||
-                    (nextHistory != null &&
-                        !DateUtils.isSameDay(currentHistory.lastSeen.toDate(),
-                            currentHistory.lastSeen.toDate()))) {
-                  children = [
-                    const SizedBox(height: 12),
-                    Text(
-                      timeago
-                          .format(
-                            currentHistory.lastSeen.toDate(),
-                            locale: "pt_BR",
-                          )
-                          .toCamelCase(),
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 12),
-                    ),
-                    ...children
-                  ];
-                }
+                      if (isFirstItem ||
+                          (nextHistory != null &&
+                              !DateUtils.isSameDay(
+                                  currentHistory.lastSeen.toDate(),
+                                  currentHistory.lastSeen.toDate()))) {
+                        children = [
+                          const SizedBox(height: 12),
+                          Text(
+                            timeago
+                                .format(
+                                  currentHistory.lastSeen.toDate(),
+                                  locale: "pt_BR",
+                                )
+                                .toCamelCase(),
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 12),
+                          ),
+                          ...children
+                        ];
+                      }
 
-                return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: children);
-              },
-            ),
+                      return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: children);
+                    },
+                  )
+                : ListView(
+                    children: widget.history.map((e) {
+                      if (e.name
+                          .toLowerCase()
+                          .contains(pesquisa.toLowerCase())) {
+                        return ProductCard(history: e);
+                      }
+                      return const SizedBox.shrink();
+                    }).toList(),
+                  ),
           ),
         ],
       ),
