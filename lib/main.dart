@@ -37,11 +37,7 @@ class _AppState extends State<App> {
   }
 
   Future initCameras() async {
-    try {
-      cameras = await availableCameras();
-    } catch (e) {
-      print(e.toString());
-    }
+    cameras = await availableCameras();
   }
 
   Future init() async {

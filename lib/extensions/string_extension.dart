@@ -8,5 +8,5 @@ extension StringExtension on String {
     );
   }
 
-  String normalize() => removeDiacritics(toLowerCase());
+  String normalize() => removeDiacritics(toLowerCase().trim().replaceAll(RegExp(r'\s+'), ' '));
 }

@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:escanio_app/main.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_mlkit_barcode_scanning/google_mlkit_barcode_scanning.dart';
+import 'dart:math';
 
 class ScannerPage extends StatefulWidget {
   const ScannerPage({super.key});
@@ -45,14 +46,17 @@ class _ScannerPageState extends State<ScannerPage> {
   }
 
   InputImage? _inputImageFromCameraImage(CameraImage image) {
-    final rotation = InputImageRotationValue.fromRawValue(camera!.sensorOrientation);
+    final rotation =
+        InputImageRotationValue.fromRawValue(camera!.sensorOrientation);
 
     if (rotation == null) {
       return null;
     }
 
     final format = InputImageFormatValue.fromRawValue(image.format.raw);
-    if (format == null || format != InputImageFormat.nv21 || image.planes.length != 1) {
+    if (format == null ||
+        format != InputImageFormat.nv21 ||
+        image.planes.length != 1) {
       return null;
     }
 
@@ -110,8 +114,11 @@ class _ScannerPageState extends State<ScannerPage> {
       Map<String, dynamic> updateValues = {"lastSeen": Timestamp.now()};
 
       if (lastPrice != history.price) {
-        product.prices.insert(0, PriceModel(date: Timestamp.now(), value: lastPrice));
-        ProductsService.collection.doc(product.id).update({"prices": product.prices});
+        product.prices
+            .insert(0, PriceModel(date: Timestamp.now(), value: lastPrice));
+        ProductsService.collection
+            .doc(product.id)
+            .update({"prices": product.prices});
         updateValues["price"] = lastPrice;
       }
 
@@ -153,6 +160,60 @@ class _ScannerPageState extends State<ScannerPage> {
         _blockList.add(code);
       }
 
+      //Sorteio - A Garrafa do Pedro
+      final pessoa = [
+        "ANA NICOLLY BERNARDELI FEDIRISSI DASCENZIO",
+        "ANTONIO AUGUSTO BOGAZ CABEÇO",
+        "BRUNO GARCIA GONCALVES",
+        "CHRISTOPHER SEIJI TAKAHASHI",
+        "DANIEL BARROS SILVA",
+        "DANIELA VERARDI MADLUM",
+        "GABRIEL AFONSO CASADO ARRAIS",
+        "GABRIEL BONIL DA SILVA",
+        "GABRIEL VITURI TOZATO",
+        "HUGO GONCALVES DE MACEDO",
+        "HUGO MIYAMOTO",
+        "JONATHAN GARCIA SPEÇAMILLIO",
+        "JULIANA APARECIDA DE SOUZA COSTA",
+        "LARA SELENA GONCALVES SCARANELLO",
+        "LEONARDO ALVES CALDEIRA",
+        "LUAN VINICIUS SIMÃO",
+        "LUCAS ALIXAME",
+        "LUCAS RIBEIRO DE SOUZA",
+        "LUCAS RODRIGO DOS SANTOS DE OLIVEIRA",
+        "MATHEUS VITTOREL OBA",
+        "MOISES CAMILO BRAMBILLA CORREA",
+        "NICOLAS GONÇALVES VELLO",
+        "NICOLAS VARGAS GUIMARAES",
+        "PEDRO HENRIQUE RODRIGUES SOLDERA",
+        "PEDRO HENRIQUE SIQUEIRA DA SILVA",
+        "RAPHAEL STEFEN BARRETO",
+        "RICARDO MORAES GONCALVES JUNIOR",
+        "SAMUEL LUIS GOMES",
+        "SAMUEL MELEGATTI SCAVASSA",
+        "TAYLOR RAYAN DE ARAUJO FERNANDES",
+        "THALIS URIEL CHOEIRI MICHELINO",
+        "THIAGO DE CARVALHO REGIS",
+        "VINICIUS GUIMARAES DOS SANTOS",
+        "VIVIAN RODRIGUES NADOTI",
+      ];
+
+      final destino = Random().nextInt(pessoa.length);
+
+      if (code.toString() == "7891098040848") {
+        if (!_blockList.contains(code)) {
+          _blockList.add(code);
+        }
+        _scanned.insert(
+            0,
+            ProductModel(
+                id: "7891098040848",
+                name: pessoa[destino].toString(),
+                prices: [PriceModel(date: Timestamp.now(), value: 999.99)],
+                barCode: "7891098040848"));
+        continue;
+      }
+
       for (final product in products) {
         await _addToHistory(product);
         _scanned.insert(0, product);
@@ -186,7 +247,8 @@ class _ScannerPageState extends State<ScannerPage> {
                   aspectRatio: 1 / previewRatio,
                   child: ClipRect(
                     child: Transform.scale(
-                      scale: _cameraController!.value.aspectRatio / previewRatio,
+                      scale:
+                          _cameraController!.value.aspectRatio / previewRatio,
                       child: Center(
                         child: CameraPreview(_cameraController!),
                       ),
@@ -200,7 +262,9 @@ class _ScannerPageState extends State<ScannerPage> {
                       padding: const EdgeInsets.all(24),
                       child: SvgPicture.asset(
                         "images/scanner_layout.svg",
-                        colorFilter: ColorFilter.mode(Theme.of(context).colorScheme.primary, BlendMode.srcIn),
+                        colorFilter: ColorFilter.mode(
+                            Theme.of(context).colorScheme.primary,
+                            BlendMode.srcIn),
                         width: double.infinity,
                       ),
                     ),
@@ -212,6 +276,7 @@ class _ScannerPageState extends State<ScannerPage> {
               child: Padding(
                 padding: const EdgeInsets.all(16),
                 child: ListView.builder(
+                  padding: const EdgeInsets.only(bottom: 24),
                   itemCount: _scanned.length,
                   itemBuilder: (context, index) {
                     return ScannedCard(

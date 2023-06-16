@@ -68,6 +68,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
           const SizedBox(height: 26),
           Expanded(
             child: ListView(
+              padding: const EdgeInsets.only(bottom: 24),
               children: widget.favourites.map(
                 (e) {
                   if (pesquisa.isEmpty) return ProductCard(history: e);

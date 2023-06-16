@@ -74,6 +74,7 @@ class _HistoryPageState extends State<HistoryPage> {
           Expanded(
             child: pesquisa.isEmpty
                 ? ListView.builder(
+                    padding: const EdgeInsets.only(bottom: 24),
                     itemCount: widget.history.length,
                     itemBuilder: (context, index) {
                       var currentHistory = widget.history[index];
@@ -111,6 +112,7 @@ class _HistoryPageState extends State<HistoryPage> {
                     },
                   )
                 : ListView(
+                    padding: const EdgeInsets.only(bottom: 24),
                     children: widget.history.map((e) {
                       if (e.name.normalize().contains(pesquisa.normalize())) {
                         return ProductCard(history: e);
