@@ -137,6 +137,7 @@ class _UserPageState extends State<UserPage> {
                                     .where((h) => h.isFavourite)
                                     .length
                                     .toString(),
+                                style: const TextStyle(color: Colors.white),
                               ),
                               const SizedBox(
                                 height: 50,
@@ -193,7 +194,12 @@ class _UserPageState extends State<UserPage> {
                           right: 0,
                           child: Row(
                             children: [
-                              Text(widget.history.length.toString()),
+                              Text(
+                                widget.history.length.toString(),
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
                               const SizedBox(
                                 height: 50,
                                 width: 50,
@@ -292,6 +298,25 @@ class _UserPageState extends State<UserPage> {
                 ),
               ),
               const SizedBox(height: 20),
+
+              // ElevatedButton(
+              //   onPressed: () async {
+              //     final CollectionReference produtosCollection = FirebaseFirestore.instance.collection('products');
+              //     final QuerySnapshot documentosProdutos = await produtosCollection.get();
+
+              //     List<QueryDocumentSnapshot> documents = documentosProdutos.docs;
+
+              //     int count = 1;
+              //     for (QueryDocumentSnapshot document in documents) {
+              //       String barcode = "10000" + count.toString().padLeft(2,"0");
+              //       await produtosCollection
+              //           .doc(document.id)
+              //           .update({'barCode': barcode});
+              //       count += 1;
+              //     }
+              //   },
+              //   child: const Text("Atualizar Código de Barras"),
+              // ),
             ],
           ),
         ),
