@@ -1,5 +1,7 @@
 import 'package:camera/camera.dart';
+import 'package:escanio_app/extensions/color_extension.dart';
 import 'package:escanio_app/extensions/context_extension.dart';
+import 'package:escanio_app/extensions/material_color_extension.dart';
 import 'package:escanio_app/pages/home_page.dart';
 import 'package:escanio_app/pages/login_page.dart';
 import 'package:escanio_app/pages/scanner_page.dart';
@@ -59,15 +61,20 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = ColorScheme.fromSwatch(
+      primarySwatch: MaterialColorExtension.fromColor(
+        ColorExtension.fromHex("#CB3232"),
+      ),
+    );
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: "Escânio",
       theme: ThemeData.light().copyWith(
-        colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.red),
-        // cardColor: Colors.grey
+        colorScheme: colorScheme,
       ),
       darkTheme: ThemeData.dark().copyWith(
-        colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.red),
+        colorScheme: colorScheme,
         scaffoldBackgroundColor: const Color.fromRGBO(27, 30, 35, 0.76),
       ),
       routes: {
@@ -89,8 +96,11 @@ class SplashScreen extends StatelessWidget {
           height: double.infinity,
           child: Center(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 32),
-              child: SvgPicture.asset(context.logoPath),
+              padding: const EdgeInsets.symmetric(horizontal: 44),
+              child: SvgPicture.asset(
+                context.logoPath,
+                width: double.infinity,
+              ),
             ),
           ),
         ),

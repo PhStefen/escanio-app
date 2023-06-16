@@ -112,9 +112,7 @@ class _HistoryPageState extends State<HistoryPage> {
                   )
                 : ListView(
                     children: widget.history.map((e) {
-                      if (e.name
-                          .toLowerCase()
-                          .contains(pesquisa.toLowerCase())) {
+                      if (e.name.normalize().contains(pesquisa.normalize())) {
                         return ProductCard(history: e);
                       }
                       return const SizedBox.shrink();

@@ -55,14 +55,14 @@ class _LoginPageState extends State<LoginPage> {
                       Expanded(
                         child: Column(
                           children: [
-                            LoginButton(
+                            LoginPageButton(
                               onPressed: () => _signIn(false),
                               label: "Continuar como anônimo",
                               iconPath: "images/logo_incognito.svg",
                             ),
                             const SizedBox(height: 20),
                             if (!kIsWeb) ...[
-                              LoginButton(
+                              LoginPageButton(
                                 onPressed: () => _signIn(true),
                                 label: "Continuar como Google",
                                 iconPath: "images/logo_google.svg",
@@ -80,11 +80,11 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
-class LoginButton extends StatelessWidget {
+class LoginPageButton extends StatelessWidget {
   final void Function() onPressed;
   final String label;
   final String iconPath;
-  const LoginButton({
+  const LoginPageButton({
     super.key,
     required this.onPressed,
     required this.label,
@@ -108,7 +108,7 @@ class LoginButton extends StatelessWidget {
         ),
       ),
       child: Padding(
-        padding: const EdgeInsets.only(right: 8, left: 4, top: 8, bottom: 8),
+        padding: const EdgeInsets.only(right: 4, left: 8, top: 8, bottom: 8),
         child: SizedBox(
           height: 50,
           child: Row(
@@ -120,8 +120,8 @@ class LoginButton extends StatelessWidget {
                 child: SvgPicture.asset(
                   iconPath,
                   height: 32,
-                  colorFilter: ColorFilter.mode(
-                    context.isDarkMode ? Colors.black : Colors.white,
+                  colorFilter: const ColorFilter.mode(
+                    Colors.white,
                     BlendMode.srcIn,
                   ),
                 ),

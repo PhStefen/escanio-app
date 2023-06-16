@@ -1,9 +1,6 @@
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:escanio_app/services/product_service.dart';
+import 'package:escanio_app/extensions/context_extension.dart';
 import 'package:escanio_app/models/history_model.dart';
-import 'package:escanio_app/models/price_model.dart';
 import 'package:escanio_app/services/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -48,24 +45,12 @@ class _UserPageState extends State<UserPage> {
             Column(
               children: [
                 Container(
-                  color: Theme.of(context).colorScheme.primary,
-                  padding: const EdgeInsetsDirectional.only(start: 10, top: 10),
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: IconButton(
-                      icon: const Icon(Icons.arrow_back_rounded),
-                      onPressed: widget.onBack,
-                    ),
-                  ),
-                ),
-                Container(
-                  height: 200,
-                  width: double.infinity,
-                  color: Theme.of(context).colorScheme.primary,
+                  height: 180,
+                  color: context.theme.colorScheme.primary,
                   child: Align(
                     alignment: Alignment.topCenter,
                     child: Padding(
-                      padding: const EdgeInsetsDirectional.only(top: 54),
+                      padding: const EdgeInsetsDirectional.only(top: 40),
                       child: Text(
                         currentUser!.isAnonymous
                             ? 'Anônimo'
@@ -82,9 +67,7 @@ class _UserPageState extends State<UserPage> {
                 const SizedBox(height: 40),
               ],
             ),
-            //Imagem de Perfil
             Positioned(
-              bottom: 0,
               child: ClipOval(
                 child: Container(
                   decoration: BoxDecoration(
@@ -111,200 +94,110 @@ class _UserPageState extends State<UserPage> {
                 ),
               ),
             ),
+            Positioned(
+              left: 0,
+              top: 0,
+              child: IconButton(
+                icon: const Icon(Icons.arrow_back_rounded),
+                color: Colors.white,
+                onPressed: widget.onBack,
+              ),
+            ),
           ],
         ),
         const SizedBox(height: 32),
         Expanded(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              //Botão Favorito
-              GestureDetector(
-                onTap: widget.onFavourite,
-                child: Container(
-                  width: double.infinity,
-                  margin: const EdgeInsets.symmetric(horizontal: 20),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primary,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: SizedBox(
-                    height: 50,
-                    child: Stack(
-                      children: [
-                        Positioned(
-                          right: 0,
-                          child: Row(
-                            children: [
-                              Text(
-                                widget.history
-                                    .where((h) => h.isFavourite)
-                                    .length
-                                    .toString(),
-                                style: const TextStyle(color: Colors.white),
-                              ),
-                              const SizedBox(
-                                height: 50,
-                                width: 50,
-                                child: Icon(
-                                  Icons.favorite_outlined,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: const [
-                                SizedBox(width: 20),
-                                Text(
-                                  "Favoritos",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                UserPageButton(
+                  onPressed: widget.onFavourite,
+                  label: "Favoritos",
+                  icon: Icons.favorite_rounded,
+                  counter: widget.history
+                      .where((element) => element.isFavourite)
+                      .length,
                 ),
-              ),
-
-              const SizedBox(height: 12),
-
-              //Botão Histórico
-              GestureDetector(
-                onTap: widget.onHistory,
-                child: Container(
-                  width: double.infinity,
-                  margin: const EdgeInsets.symmetric(horizontal: 20),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primary,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: SizedBox(
-                    height: 50,
-                    child: Stack(
-                      children: [
-                        Positioned(
-                          right: 0,
-                          child: Row(
-                            children: [
-                              Text(
-                                widget.history.length.toString(),
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 50,
-                                width: 50,
-                                child: Icon(Icons.history, color: Colors.white),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: const [
-                                SizedBox(width: 20),
-                                Text(
-                                  "Histórico",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
+                const SizedBox(
+                  height: 8,
                 ),
-              ),
-
-              //Botão Sair
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Container(
-                      width: double.infinity,
-                      margin: const EdgeInsets.symmetric(horizontal: 20),
-                      child: ElevatedButton(
-                        style: ButtonStyle(
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              // side: BorderSide(color: Colors.white),
-                            ),
-                          ),
-                          backgroundColor: MaterialStateProperty.all(
-                              Theme.of(context).cardColor ==
-                                      const Color(0xffffffff)
-                                  ? Theme.of(context).colorScheme.primary
-                                  : Theme.of(context).cardColor),
-                        ),
+                UserPageButton(
+                  onPressed: widget.onHistory,
+                  label: "Histórico",
+                  icon: Icons.history_rounded,
+                  counter: widget.history.length,
+                ),
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 32),
+                      child: UserPageButton(
                         onPressed: AuthService.signOut,
-                        child: SizedBox(
-                          height: 50,
-                          child: Stack(
-                            children: [
-                              const Positioned(
-                                right: 0,
-                                child: SizedBox(
-                                  height: 50,
-                                  width: 50,
-                                  child: Icon(
-                                    Icons.login_rounded,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: const [
-                                      SizedBox(width: 5),
-                                      Text(
-                                        "Sair",
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
+                        label: "Sair",
+                        icon: Icons.logout_rounded,
+                        backgroundColor: context.theme.cardColor,
                       ),
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ],
+    );
+  }
+}
+
+class UserPageButton extends StatelessWidget {
+  final void Function() onPressed;
+  final String label;
+  final IconData icon;
+  final int? counter;
+  final Color? backgroundColor;
+  const UserPageButton({
+    super.key,
+    required this.onPressed,
+    required this.label,
+    required this.icon,
+    this.counter,
+    this.backgroundColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    var bgColor = backgroundColor ?? context.theme.colorScheme.primary;
+
+    return ElevatedButton(
+      onPressed: onPressed,
+      style: ButtonStyle(
+        shape: MaterialStateProperty.all(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+        backgroundColor: MaterialStateProperty.all(bgColor),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.only(right: 4, left: 8, top: 16, bottom: 16),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(label),
+            Wrap(
+              spacing: 8,
+              children: [
+                if (counter != null) Text(counter.toString()),
+                Icon(icon),
+              ],
+            )
+          ],
+        ),
+      ),
     );
   }
 }

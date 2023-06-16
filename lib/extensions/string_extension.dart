@@ -1,3 +1,5 @@
+import 'package:diacritic/diacritic.dart';
+
 extension StringExtension on String {
   String toCamelCase() {
     return replaceFirstMapped(
@@ -5,4 +7,6 @@ extension StringExtension on String {
       (match) => match.group(0)!.toUpperCase(),
     );
   }
+
+  String normalize() => removeDiacritics(toLowerCase());
 }

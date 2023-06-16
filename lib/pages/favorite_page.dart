@@ -1,4 +1,5 @@
 import 'package:escanio_app/components/product_card.dart';
+import 'package:escanio_app/extensions/string_extension.dart';
 import 'package:escanio_app/models/history_model.dart';
 import 'package:flutter/material.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -70,8 +71,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
               children: widget.favourites.map(
                 (e) {
                   if (pesquisa.isEmpty) return ProductCard(history: e);
-                  if (e.name.toLowerCase().contains(pesquisa.toLowerCase())) {
-                    // print("pesquisa: $pesquisa, nome: ${e.name}");
+                  if (e.name.normalize().contains(pesquisa.normalize())) {
                     return ProductCard(history: e);
                   }
                   return const SizedBox.shrink();
