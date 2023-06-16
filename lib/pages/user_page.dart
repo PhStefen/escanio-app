@@ -141,6 +141,7 @@ class _UserPageState extends State<UserPage> {
                                     .where((h) => h.isFavourite)
                                     .length
                                     .toString(),
+                                style: const TextStyle(color: Colors.white),
                               ),
                               const SizedBox(
                                 height: 50,
@@ -197,7 +198,12 @@ class _UserPageState extends State<UserPage> {
                           right: 0,
                           child: Row(
                             children: [
-                              Text(widget.history.length.toString()),
+                              Text(
+                                widget.history.length.toString(),
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
                               const SizedBox(
                                 height: 50,
                                 width: 50,
@@ -294,36 +300,6 @@ class _UserPageState extends State<UserPage> {
                     ),
                   ],
                 ),
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () async {
-                  var refs = await ProductsService.collection.get();
-                  for (var ref in refs.docs) {
-                    final seed = Random();
-                    final numOfDays = seed.nextInt(30) + 1;
-                    final prices = [];
-                    for (var i = 0; i < numOfDays; i++) {
-                      var date = Timestamp.fromDate(
-                        DateTime.now().subtract(
-                          Duration(days: i),
-                        ),
-                      );
-                      var value = double.parse(
-                        (seed.nextDouble() * 25).toStringAsFixed(2),
-                      );
-                      try {
-                        prices
-                            .add(PriceModel(date: date, value: value).toJson());
-                      } catch (e) {
-                        print(e);
-                        print({"value": value, "date": date});
-                      }
-                    }
-                    ref.reference.update({"prices": prices});
-                  }
-                },
-                child: const Text("Atualizar Valor de Produtos"),
               ),
             ],
           ),
