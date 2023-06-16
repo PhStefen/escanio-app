@@ -2,7 +2,6 @@ import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:escanio_app/components/loading.dart';
 import 'package:escanio_app/components/scanned_card.dart';
-import 'package:escanio_app/extensions/iterable_extension.dart';
 import 'package:escanio_app/models/history_model.dart';
 import 'package:escanio_app/models/price_model.dart';
 import 'package:escanio_app/models/product_model.dart';
@@ -27,7 +26,6 @@ class _ScannerPageState extends State<ScannerPage> {
   final _barcodeScanner = BarcodeScanner();
   bool _canProcess = true;
   bool _isBusy = false;
-  bool _isStreaming = false;
 
   CameraController? _cameraController;
   CameraDescription? camera;
@@ -92,20 +90,10 @@ class _ScannerPageState extends State<ScannerPage> {
 
   Future<void> _pauseLiveFeed() async {
     _cameraController?.stopImageStream();
-    if (mounted) {
-      setState(() {
-        _isStreaming = true;
-      });
-    }
   }
 
   Future<void> _resumeLiveFeed() async {
     _cameraController?.startImageStream(_processCameraImage);
-    if (mounted) {
-      setState(() {
-        _isStreaming = true;
-      });
-    }
   }
 
   Future<void> _addToHistory(ProductModel product) async {
@@ -159,9 +147,6 @@ class _ScannerPageState extends State<ScannerPage> {
       if (_blockList.contains(code)) {
         continue;
       }
-      if (_scanned.any((element) => element.barCode == code)) {
-        continue;
-      }
       var snapshot = await ProductsService.scan(code);
       var products = snapshot.docs.map((e) => e.data()).toList();
       if (products.isEmpty) {
@@ -171,6 +156,7 @@ class _ScannerPageState extends State<ScannerPage> {
       for (final product in products) {
         await _addToHistory(product);
         _scanned.insert(0, product);
+        _blockList.add(product.barCode);
       }
     }
 

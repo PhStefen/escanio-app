@@ -70,11 +70,10 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - images/LogoScanner.png
-    - images/anonymous32.png
-    - images/anonymous512.png
-    - images/google_PNG19635.png
-    - images/logo_escuro.svg
-    - images/logo_claro.svg
+    - images/logo_incognito.svg
+    - images/logo_google.svg
+    - images/logo_light_mode.svg
+    - images/logo_dark_mode.svg
     - images/scanner_layout.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see

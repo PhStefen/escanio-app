@@ -1,4 +1,5 @@
 import 'package:camera/camera.dart';
+import 'package:escanio_app/extensions/context_extension.dart';
 import 'package:escanio_app/pages/home_page.dart';
 import 'package:escanio_app/pages/login_page.dart';
 import 'package:escanio_app/pages/scanner_page.dart';
@@ -6,6 +7,7 @@ import 'package:escanio_app/services/auth_service.dart';
 import 'package:escanio_app/services/firebase_service.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 List<CameraDescription> cameras = [];
 
@@ -81,10 +83,16 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage("images/LogoScanner.png"),
+    return Scaffold(
+      body: SafeArea(
+        child: SizedBox(
+          height: double.infinity,
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 32),
+              child: SvgPicture.asset(context.logoPath),
+            ),
+          ),
         ),
       ),
     );

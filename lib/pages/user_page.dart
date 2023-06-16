@@ -1,8 +1,13 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:escanio_app/services/product_service.dart';
 import 'package:escanio_app/models/history_model.dart';
+import 'package:escanio_app/models/price_model.dart';
 import 'package:escanio_app/services/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class UserPage extends StatefulWidget {
   final List<HistoryModel> history;
@@ -92,10 +97,9 @@ class _UserPageState extends State<UserPage> {
                       ? const EdgeInsets.all(16)
                       : null,
                   child: currentUser!.isAnonymous
-                      ? Image.asset(
-                          'images/anonymous512.png',
+                      ? SvgPicture.asset(
+                          "images/logo_incognito.svg",
                           height: 132,
-                          width: 132,
                         )
                       : Image.network(
                           FirebaseAuth.instance.currentUser!.photoURL
@@ -292,6 +296,35 @@ class _UserPageState extends State<UserPage> {
                 ),
               ),
               const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () async {
+                  var refs = await ProductsService.collection.get();
+                  for (var ref in refs.docs) {
+                    final seed = Random();
+                    final numOfDays = seed.nextInt(30) + 1;
+                    final prices = [];
+                    for (var i = 0; i < numOfDays; i++) {
+                      var date = Timestamp.fromDate(
+                        DateTime.now().subtract(
+                          Duration(days: i),
+                        ),
+                      );
+                      var value = double.parse(
+                        (seed.nextDouble() * 25).toStringAsFixed(2),
+                      );
+                      try {
+                        prices
+                            .add(PriceModel(date: date, value: value).toJson());
+                      } catch (e) {
+                        print(e);
+                        print({"value": value, "date": date});
+                      }
+                    }
+                    ref.reference.update({"prices": prices});
+                  }
+                },
+                child: const Text("Atualizar Valor de Produtos"),
+              ),
             ],
           ),
         ),
