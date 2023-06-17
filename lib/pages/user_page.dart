@@ -138,7 +138,9 @@ class _UserPageState extends State<UserPage> {
                         onPressed: AuthService.signOut,
                         label: "Sair",
                         icon: Icons.logout_rounded,
-                        backgroundColor: context.theme.cardColor,
+                        backgroundColor: context.theme.cardColor == Colors.white
+                            ? context.theme.colorScheme.primary
+                            : context.theme.cardColor,
                       ),
                     ),
                   ),
